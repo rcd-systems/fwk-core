@@ -5,6 +5,7 @@ import java.io.PrintStream;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import systems.rcd.fwk.core.ctx.RcdContext;
@@ -12,34 +13,33 @@ import systems.rcd.fwk.core.log.impl.RcdPrintSteamLogService;
 
 public class RcdLogLevelTest {
 
+    private ByteArrayOutputStream byteArrayOutputStream;
+
+    @Before
+    public void before() {
+        byteArrayOutputStream = new ByteArrayOutputStream();
+    }
+
     @Test
     public void testRcdConsoleLogService() {
-
         final RcdPrintSteamLogService consoleLogService = (RcdPrintSteamLogService) RcdContext
                 .getService(RcdLogService.class);
-
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         final PrintStream printStream = new PrintStream(byteArrayOutputStream);
         consoleLogService.setPrintStream(printStream);
 
         consoleLogService.instLog(RcdLogLevel.DEBUG, "Theme", "A message");
-        Assert.assertEquals("", byteArrayOutputStream.toString());
-        byteArrayOutputStream.reset();
+        checkOutput("");
 
         consoleLogService.instLog(RcdLogLevel.INFO, "Theme", "A message");
-        Assert.assertEquals("[INFO]  - Theme - A message" + System.lineSeparator(), byteArrayOutputStream.toString());
-        byteArrayOutputStream.reset();
+        checkOutput("[INFO]  - Theme - A message" + System.lineSeparator());
 
         consoleLogService.instLog(RcdLogLevel.WARN, "Theme", "A message");
-        Assert.assertEquals("[WARN]  - Theme - A message" + System.lineSeparator(), byteArrayOutputStream.toString());
-        byteArrayOutputStream.reset();
+        checkOutput("[WARN]  - Theme - A message" + System.lineSeparator());
 
         consoleLogService.instLog(RcdLogLevel.ERROR, "Theme", "A message");
-        Assert.assertEquals("[ERROR] - Theme - A message" + System.lineSeparator(), byteArrayOutputStream.toString());
-        byteArrayOutputStream.reset();
+        checkOutput("[ERROR] - Theme - A message" + System.lineSeparator());
 
         consoleLogService.instLog(RcdLogLevel.FATAL, "Theme", "A message", new NullPointerException());
-        // TODO
         byteArrayOutputStream.reset();
 
         consoleLogService.setLevelThreshold("Theme", RcdLogLevel.DEBUG);
@@ -47,12 +47,20 @@ public class RcdLogLevelTest {
         consoleLogService.setLogTheme(false);
 
         consoleLogService.instLog(RcdLogLevel.DEBUG, "Theme", "A message");
-        Assert.assertEquals("A message" + System.lineSeparator(), byteArrayOutputStream.toString());
-        byteArrayOutputStream.reset();
+        checkOutput("A message" + System.lineSeparator());
         consoleLogService.instLog(RcdLogLevel.INFO, "Theme", "A message");
+        checkOutput("A message" + System.lineSeparator());
         consoleLogService.instLog(RcdLogLevel.WARN, "Theme", "A message");
+        checkOutput("A message" + System.lineSeparator());
         consoleLogService.instLog(RcdLogLevel.ERROR, "Theme", "A message");
+        checkOutput("A message" + System.lineSeparator());
         consoleLogService.instLog(RcdLogLevel.FATAL, "Theme", "A message", new NullPointerException());
+        byteArrayOutputStream.reset();
 
+    }
+
+    private void checkOutput(final String expectedOutput) {
+        Assert.assertEquals(expectedOutput, byteArrayOutputStream.toString());
+        byteArrayOutputStream.reset();
     }
 }
