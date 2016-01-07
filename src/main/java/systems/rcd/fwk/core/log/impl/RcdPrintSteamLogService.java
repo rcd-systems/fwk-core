@@ -58,20 +58,24 @@ public class RcdPrintSteamLogService implements RcdLogService {
         printStream.print(sb.toString());
     }
 
-    public void setPrintStream(final PrintStream printStream) {
+    public RcdPrintSteamLogService setPrintStream(final PrintStream printStream) {
         this.printStream = printStream;
+        return this;
     }
 
-    public void setLevelThreshold(final String theme, final RcdLogLevel logLevelThreshold) {
+    public RcdPrintSteamLogService setLevelThreshold(final String theme, final RcdLogLevel logLevelThreshold) {
         logLevelThresholdMap.put(theme, logLevelThreshold);
+        return this;
     }
 
-    public void setLogLogLevel(final boolean logLogLevel) {
+    public RcdPrintSteamLogService setLogLogLevel(final boolean logLogLevel) {
         this.logLogLevel = logLogLevel;
+        return this;
     }
 
-    public void setLogTheme(final boolean logTheme) {
+    public RcdPrintSteamLogService setLogTheme(final boolean logTheme) {
         this.logTheme = logTheme;
+        return this;
     }
 
 }

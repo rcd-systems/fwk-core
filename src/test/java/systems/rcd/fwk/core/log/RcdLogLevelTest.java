@@ -22,39 +22,36 @@ public class RcdLogLevelTest {
 
     @Test
     public void testRcdConsoleLogService() {
-        final RcdPrintSteamLogService consoleLogService = (RcdPrintSteamLogService) RcdContext
-                .getService(RcdLogService.class);
         final PrintStream printStream = new PrintStream(byteArrayOutputStream);
-        consoleLogService.setPrintStream(printStream);
+        ((RcdPrintSteamLogService) RcdContext.getService(RcdLogService.class)).setPrintStream(printStream);
 
-        consoleLogService.instLog(RcdLogLevel.DEBUG, "Theme", "A message");
+        RcdLogService.debug("Theme", "A message");
         checkOutput("");
 
-        consoleLogService.instLog(RcdLogLevel.INFO, "Theme", "A message");
+        RcdLogService.info("Theme", "A message");
         checkOutput("[INFO]  - Theme - A message" + System.lineSeparator());
 
-        consoleLogService.instLog(RcdLogLevel.WARN, "Theme", "A message");
+        RcdLogService.warn("Theme", "A message");
         checkOutput("[WARN]  - Theme - A message" + System.lineSeparator());
 
-        consoleLogService.instLog(RcdLogLevel.ERROR, "Theme", "A message");
+        RcdLogService.error("Theme", "A message");
         checkOutput("[ERROR] - Theme - A message" + System.lineSeparator());
 
-        consoleLogService.instLog(RcdLogLevel.FATAL, "Theme", "A message", new NullPointerException());
+        RcdLogService.fatal("Theme", "A message", new NullPointerException());
         byteArrayOutputStream.reset();
 
-        consoleLogService.setLevelThreshold("Theme", RcdLogLevel.DEBUG);
-        consoleLogService.setLogLogLevel(false);
-        consoleLogService.setLogTheme(false);
+        ((RcdPrintSteamLogService) RcdContext.getService(RcdLogService.class))
+        .setLevelThreshold("Theme", RcdLogLevel.DEBUG).setLogLogLevel(false).setLogTheme(false);
 
-        consoleLogService.instLog(RcdLogLevel.DEBUG, "Theme", "A message");
+        RcdLogService.debug("Theme", "A message");
         checkOutput("A message" + System.lineSeparator());
-        consoleLogService.instLog(RcdLogLevel.INFO, "Theme", "A message");
+        RcdLogService.info("Theme", "A message");
         checkOutput("A message" + System.lineSeparator());
-        consoleLogService.instLog(RcdLogLevel.WARN, "Theme", "A message");
+        RcdLogService.warn("Theme", "A message");
         checkOutput("A message" + System.lineSeparator());
-        consoleLogService.instLog(RcdLogLevel.ERROR, "Theme", "A message");
+        RcdLogService.error("Theme", "A message");
         checkOutput("A message" + System.lineSeparator());
-        consoleLogService.instLog(RcdLogLevel.FATAL, "Theme", "A message", new NullPointerException());
+        RcdLogService.fatal("Theme", "A message", new NullPointerException());
         byteArrayOutputStream.reset();
 
     }
