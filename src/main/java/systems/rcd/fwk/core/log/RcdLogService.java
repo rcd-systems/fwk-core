@@ -4,6 +4,8 @@ import systems.rcd.fwk.core.ctx.RcdContext;
 import systems.rcd.fwk.core.ctx.RcdService;
 
 public interface RcdLogService extends RcdService {
+    public static final String GLOBAL_THEME = "GLOBAL";
+
     public static void debug(final String theme, final Object... args) {
         log(RcdLogLevel.DEBUG, theme, args);
     }

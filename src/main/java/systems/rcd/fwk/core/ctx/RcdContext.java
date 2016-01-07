@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
+import systems.rcd.fwk.core.io.file.RcdFileService;
+import systems.rcd.fwk.core.io.file.impl.RcdNioFileService;
 import systems.rcd.fwk.core.log.RcdLogService;
 import systems.rcd.fwk.core.log.impl.RcdPrintSteamLogService;
 
@@ -18,6 +20,7 @@ public class RcdContext {
     };
     static {
         setGlobalServiceSupplier(RcdLogService.class, () -> new RcdPrintSteamLogService());
+        setGlobalServiceSupplier(RcdFileService.class, () -> new RcdNioFileService());
     }
 
     private final Map<Class<? extends RcdService>, RcdService> serviceMap;
@@ -55,7 +58,6 @@ public class RcdContext {
         globalContext.serviceSupplierMap.put(serviceClass, serviceSupplier);
     }
 
-    @SuppressWarnings("unchecked")
     public <T extends RcdService> void removeService(final Class<T> serviceClass) {
         if (threadLocalContext.get().serviceSupplierMap.remove(serviceClass) != null) {
             threadLocalContext.get().serviceMap.remove(serviceClass);
