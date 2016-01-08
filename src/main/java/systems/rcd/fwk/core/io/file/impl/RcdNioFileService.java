@@ -21,13 +21,12 @@ public class RcdNioFileService implements RcdFileService {
 
     @Override
     public void instReadAsStream(final Path path, final Consumer<Stream<String>> reader) throws IOException {
-        final Stream<String> lines = Files.lines(path, charset);
-        reader.accept(lines);
-        lines.close();
+        try (final Stream<String> lines = Files.lines(path, charset)) {
+            reader.accept(lines);
+        }
     }
 
     public void setCharset(final Charset charset) {
         this.charset = charset;
     }
-
 }
