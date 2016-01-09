@@ -17,8 +17,20 @@ public interface RcdFileService extends RcdService {
         RcdContext.getService(RcdFileService.class).instReadAsStream(path, reader);
     }
 
+    public static void write(final Path path, final String content) throws Exception {
+        RcdContext.getService(RcdFileService.class).instWrite(path, content);
+    }
+
+    public static void write(final Path path, final Iterable<String> content) throws Exception {
+        RcdContext.getService(RcdFileService.class).instWrite(path, content);
+    }
+
     public String instReadAsString(final Path path) throws Exception;
 
     public void instReadAsStream(final Path path, final Consumer<Stream<String>> consumer) throws Exception;
+
+    void instWrite(Path path, String content) throws Exception;
+
+    void instWrite(Path path, Iterable<String> content) throws Exception;
 
 }

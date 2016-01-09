@@ -5,13 +5,14 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import systems.rcd.fwk.core.io.file.RcdFileService;
 
 public class RcdNioFileService implements RcdFileService {
-    private Charset charset = StandardCharsets.UTF_8;
+    private final Charset charset = StandardCharsets.UTF_8;
 
     @Override
     public String instReadAsString(final Path path) throws IOException {
@@ -26,7 +27,15 @@ public class RcdNioFileService implements RcdFileService {
         }
     }
 
-    public void setCharset(final Charset charset) {
-        this.charset = charset;
+    @Override
+    public void instWrite(final Path path, final String content) throws IOException {
+        final byte[] bytes = content.getBytes(charset);
+        Files.write(path, bytes, StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+    }
+
+    @Override
+    public void instWrite(final Path path, final Iterable<String> content) throws IOException {
+        Files.write(path, content, charset, StandardOpenOption.WRITE, StandardOpenOption.CREATE,
+                StandardOpenOption.APPEND);
     }
 }
