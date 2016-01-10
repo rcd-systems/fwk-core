@@ -1,8 +1,6 @@
 package systems.rcd.fwk.core.io.file;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,11 +15,8 @@ public class RcdFileTest {
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private static final String FILE_DIRECTORY = "src/test/resources/systems/rcd/fwk/core/io/file";
-    private static final Path INPUT_PATH = Paths.get(FILE_DIRECTORY, "input.txt");
-
     @Test
-    public void testRcdNioFileService() throws Exception {
+    public void test() throws Exception {
 
         final List<String> lineList = Arrays.asList(new String[] { "Some content", "こんにちわ", "æøå" });
         final String winContent = "Some content\r\nこんにちわ\r\næøå";
