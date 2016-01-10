@@ -14,6 +14,7 @@ public class RcdPrintStreamLogService implements RcdLogService {
 
     private PrintStream printStream = System.out;
     private final Map<RcdLogTheme, RcdLogLevel> logLevelThresholdMap = new ConcurrentHashMap<>();
+    private RcdLogLevel logLevelThreshold = DEFAULT_LOG_LEVEL_THRESHOLD;
     private boolean logLogLevel = true;
     private boolean logTheme = true;
 
@@ -50,7 +51,7 @@ public class RcdPrintStreamLogService implements RcdLogService {
                 return logLevelThreshold;
             }
         }
-        return DEFAULT_LOG_LEVEL_THRESHOLD;
+        return logLevelThreshold;
     }
 
     private void printLogLevel(final RcdLogLevel logLevel) {
@@ -70,6 +71,11 @@ public class RcdPrintStreamLogService implements RcdLogService {
 
     public RcdPrintStreamLogService setLevelThreshold(final RcdLogTheme theme, final RcdLogLevel logLevelThreshold) {
         logLevelThresholdMap.put(theme, logLevelThreshold);
+        return this;
+    }
+
+    public RcdPrintStreamLogService setLogLevelThreshold(final RcdLogLevel logLevelThreshold) {
+        this.logLevelThreshold = logLevelThreshold;
         return this;
     }
 
