@@ -1,6 +1,7 @@
 package systems.rcd.fwk.core.log.impl;
 
 import java.io.PrintStream;
+import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,6 +16,7 @@ public class RcdPrintStreamLogService implements RcdLogService {
     private PrintStream printStream = System.out;
     private final Map<RcdLogTheme, RcdLogLevel> logLevelThresholdMap = new ConcurrentHashMap<>();
     private RcdLogLevel logLevelThreshold = DEFAULT_LOG_LEVEL_THRESHOLD;
+    private final boolean logTime = true;
     private boolean logLogLevel = true;
     private boolean logTheme = true;
 
@@ -22,6 +24,10 @@ public class RcdPrintStreamLogService implements RcdLogService {
     public void instLog(final RcdLogLevel logLevel, final RcdLogTheme theme, final Object... args) {
         if (mustLog(logLevel, theme)) {
             for (final Object arg : args) {
+
+                if (logTime) {
+                    printTime();
+                }
 
                 if (logLogLevel) {
                     printLogLevel(logLevel);
@@ -52,6 +58,10 @@ public class RcdPrintStreamLogService implements RcdLogService {
             }
         }
         return logLevelThreshold;
+    }
+
+    private void printTime() {
+        printStream.print(Instant.now().toString() + " - ");
     }
 
     private void printLogLevel(final RcdLogLevel logLevel) {
