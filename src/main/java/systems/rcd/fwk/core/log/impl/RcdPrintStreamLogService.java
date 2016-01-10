@@ -6,26 +6,27 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import systems.rcd.fwk.core.log.RcdLogLevel;
 import systems.rcd.fwk.core.log.RcdLogService;
+import systems.rcd.fwk.core.log.data.RcdLogTheme;
 
-public class RcdPrintSteamLogService implements RcdLogService {
+public class RcdPrintStreamLogService implements RcdLogService {
 
     private static final RcdLogLevel DEFAULT_LOG_LEVEL_THRESHOLD = RcdLogLevel.INFO;
 
     private PrintStream printStream = System.out;
-    private final Map<String, RcdLogLevel> logLevelThresholdMap = new ConcurrentHashMap<String, RcdLogLevel>();
+    private final Map<RcdLogTheme, RcdLogLevel> logLevelThresholdMap = new ConcurrentHashMap<>();
     private boolean logLogLevel = true;
     private boolean logTheme = true;
 
     @Override
-    public void instLog(final RcdLogLevel logLevel, final String theme, final Object... args) {
-        if (logLevel.ordinal() >= getLogLevelThreshold(theme).ordinal()) {
+    public void instLog(final RcdLogLevel logLevel, final RcdLogTheme theme, final Object... args) {
+        if (mustLog(logLevel, theme)) {
             for (final Object arg : args) {
 
                 if (logLogLevel) {
                     printLogLevel(logLevel);
                 }
 
-                if (logTheme) {
+                if (logTheme && theme != null) {
                     printStream.print(theme + " - ");
                 }
 
@@ -38,7 +39,11 @@ public class RcdPrintSteamLogService implements RcdLogService {
         }
     }
 
-    private RcdLogLevel getLogLevelThreshold(final String theme) {
+    private boolean mustLog(final RcdLogLevel logLevel, final RcdLogTheme theme) {
+        return logLevel.ordinal() >= getLogLevelThreshold(theme).ordinal();
+    }
+
+    private RcdLogLevel getLogLevelThreshold(final RcdLogTheme theme) {
         if (theme != null) {
             final RcdLogLevel logLevelThreshold = logLevelThresholdMap.get(theme);
             if (logLevelThreshold != null) {
@@ -58,22 +63,22 @@ public class RcdPrintSteamLogService implements RcdLogService {
         printStream.print(sb.toString());
     }
 
-    public RcdPrintSteamLogService setPrintStream(final PrintStream printStream) {
+    public RcdPrintStreamLogService setPrintStream(final PrintStream printStream) {
         this.printStream = printStream;
         return this;
     }
 
-    public RcdPrintSteamLogService setLevelThreshold(final String theme, final RcdLogLevel logLevelThreshold) {
+    public RcdPrintStreamLogService setLevelThreshold(final RcdLogTheme theme, final RcdLogLevel logLevelThreshold) {
         logLevelThresholdMap.put(theme, logLevelThreshold);
         return this;
     }
 
-    public RcdPrintSteamLogService setLogLogLevel(final boolean logLogLevel) {
+    public RcdPrintStreamLogService setLogLogLevel(final boolean logLogLevel) {
         this.logLogLevel = logLogLevel;
         return this;
     }
 
-    public RcdPrintSteamLogService setLogTheme(final boolean logTheme) {
+    public RcdPrintStreamLogService setLogTheme(final boolean logTheme) {
         this.logTheme = logTheme;
         return this;
     }

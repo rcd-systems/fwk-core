@@ -3,13 +3,13 @@ package systems.rcd.fwk.core.log;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import systems.rcd.fwk.core.ctx.RcdContext;
-import systems.rcd.fwk.core.log.impl.RcdPrintSteamLogService;
+import systems.rcd.fwk.core.log.data.RcdLogTheme;
+import systems.rcd.fwk.core.log.impl.RcdPrintStreamLogService;
 
 public class RcdLogLevelTest {
 
@@ -22,36 +22,38 @@ public class RcdLogLevelTest {
 
     @Test
     public void testRcdConsoleLogService() {
-        final PrintStream printStream = new PrintStream(byteArrayOutputStream);
-        ((RcdPrintSteamLogService) RcdContext.getService(RcdLogService.class)).setPrintStream(printStream);
+        final RcdLogTheme theme = new RcdLogTheme("Theme");
 
-        RcdLogService.debug("Theme", "A message");
+        final PrintStream printStream = new PrintStream(byteArrayOutputStream);
+        ((RcdPrintStreamLogService) RcdContext.getService(RcdLogService.class)).setPrintStream(printStream);
+
+        RcdLogService.debug(theme, "A message");
         checkOutput("");
 
-        RcdLogService.info("Theme", "A message");
+        RcdLogService.info(theme, "A message");
         checkOutput("[INFO]  - Theme - A message" + System.lineSeparator());
 
-        RcdLogService.warn("Theme", "A message");
+        RcdLogService.warn(theme, "A message");
         checkOutput("[WARN]  - Theme - A message" + System.lineSeparator());
 
-        RcdLogService.error("Theme", "A message");
-        checkOutput("[ERROR] - Theme - A message" + System.lineSeparator());
+        RcdLogService.error("A message");
+        checkOutput("[ERROR] - A message" + System.lineSeparator());
 
-        RcdLogService.fatal("Theme", "A message", new NullPointerException());
+        RcdLogService.fatal(theme, "A message", new NullPointerException());
         byteArrayOutputStream.reset();
 
-        ((RcdPrintSteamLogService) RcdContext.getService(RcdLogService.class))
-        .setLevelThreshold("Theme", RcdLogLevel.DEBUG).setLogLogLevel(false).setLogTheme(false);
+        ((RcdPrintStreamLogService) RcdContext.getService(RcdLogService.class))
+                .setLevelThreshold(theme, RcdLogLevel.DEBUG).setLogLogLevel(false).setLogTheme(false);
 
-        RcdLogService.debug("Theme", "A message");
+        RcdLogService.debug(theme, "A message");
         checkOutput("A message" + System.lineSeparator());
-        RcdLogService.info("Theme", "A message");
+        RcdLogService.info(theme, "A message");
         checkOutput("A message" + System.lineSeparator());
-        RcdLogService.warn("Theme", "A message");
+        RcdLogService.warn("A message");
         checkOutput("A message" + System.lineSeparator());
-        RcdLogService.error("Theme", "A message");
+        RcdLogService.error(theme, "A message");
         checkOutput("A message" + System.lineSeparator());
-        RcdLogService.fatal("Theme", "A message", new NullPointerException());
+        RcdLogService.fatal(theme, "A message", new NullPointerException());
         byteArrayOutputStream.reset();
 
     }

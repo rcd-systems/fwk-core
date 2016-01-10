@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 import systems.rcd.fwk.core.io.file.RcdFileService;
 import systems.rcd.fwk.core.io.file.impl.RcdNioFileService;
 import systems.rcd.fwk.core.log.RcdLogService;
-import systems.rcd.fwk.core.log.impl.RcdPrintSteamLogService;
+import systems.rcd.fwk.core.log.impl.RcdPrintStreamLogService;
 
 public class RcdContext {
     private static final RcdContext globalContext = new RcdContext(new ConcurrentHashMap<>(), new ConcurrentHashMap<>());
@@ -19,7 +19,7 @@ public class RcdContext {
         };
     };
     static {
-        setGlobalServiceSupplier(RcdLogService.class, () -> new RcdPrintSteamLogService());
+        setGlobalServiceSupplier(RcdLogService.class, () -> new RcdPrintStreamLogService());
         setGlobalServiceSupplier(RcdFileService.class, () -> new RcdNioFileService());
     }
 
