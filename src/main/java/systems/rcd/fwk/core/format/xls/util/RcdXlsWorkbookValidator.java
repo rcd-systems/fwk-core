@@ -23,9 +23,10 @@ public class RcdXlsWorkbookValidator {
         return this;
     }
 
-    public void addSheetValidator(final String sheetName, final RcdXlsSheetValidator sheetValidator) {
+    public RcdXlsWorkbookValidator addSheetValidator(final String sheetName, final RcdXlsSheetValidator sheetValidator) {
         expectedSheetNameSet.add(sheetName);
         sheetValidatorMap.put(sheetName, sheetValidator);
+        return this;
     }
 
     public List<String> validate(final RcdXlsWorkbook workbook) {

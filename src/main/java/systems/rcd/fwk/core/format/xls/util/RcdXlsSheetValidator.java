@@ -14,6 +14,8 @@ import systems.rcd.fwk.core.format.xls.data.RcdXlsSheet;
 
 public class RcdXlsSheetValidator {
 
+    private final boolean headerLine = true;
+
     private final Map<Integer, RcdXlsCellType> columnTypeMap = new LinkedHashMap<>();
 
     private final Set<Integer> mandatorinessSet = new LinkedHashSet<>();
@@ -23,15 +25,18 @@ public class RcdXlsSheetValidator {
         return this;
     }
 
-    public RcdXlsSheetValidator setColumnMandatoriness(final int columnIndex) {
-        mandatorinessSet.add(columnIndex);
+    public RcdXlsSheetValidator setColumnMandatoriness(final int... columnIndexes) {
+        for (final int columnIndex : columnIndexes) {
+            mandatorinessSet.add(columnIndex);
+        }
         return this;
+
     }
 
     public List<String> validate(final String sheetName, final RcdXlsSheet sheet) {
         final List<String> errors = new LinkedList<String>();
 
-        for (int i = 0; i < sheet.size(); i++) {
+        for (int i = headerLine ? 1 : 0; i < sheet.size(); i++) {
             final RcdXlsRow row = sheet.get(i);
 
             if (row == null) {
@@ -49,10 +54,12 @@ public class RcdXlsSheetValidator {
 
             for (final Map.Entry<Integer, RcdXlsCellType> columnTypeEntry : columnTypeMap.entrySet()) {
                 final int columnIndex = columnTypeEntry.getKey();
-                final RcdXlsCell rcdXlsCell = row.get(columnIndex);
-                if (rcdXlsCell != null && columnTypeEntry.getValue().equals(rcdXlsCell.getType())) {
+                final RcdXlsCell rcdXlsCell = row.size() > columnIndex ? row.get(columnIndex) : null;
+                if (rcdXlsCell != null && !columnTypeEntry.getValue()
+                        .equals(rcdXlsCell.getType())) {
                     errors.add("Sheet '" + sheetName + "': Incorrect type in the cell (" + (i + 1) + ";"
-                            + (columnIndex + 1) + "').");
+                            + (columnIndex + 1) + "): " + rcdXlsCell.getType() + " instead of "
+                            + columnTypeEntry.getValue());
                 }
             }
         }
