@@ -9,7 +9,7 @@ public interface RcdXlsCell {
 
     Instant getInstantValue();
 
-    double getNumericValue();
+    Double getNumericValue();
 
-    boolean getBooleanValue();
+    Boolean getBooleanValue();
 }

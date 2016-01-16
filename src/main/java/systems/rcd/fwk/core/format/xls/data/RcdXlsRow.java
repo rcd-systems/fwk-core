@@ -8,7 +8,7 @@ public interface RcdXlsRow extends List<RcdXlsCell> {
 
     Instant getInstant(int index);
 
-    Double getNumber(int index);
+    Number getNumber(int index);
 
     Boolean getBoolean(int index);
 
