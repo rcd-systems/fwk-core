@@ -46,7 +46,8 @@ public interface RcdLogService extends RcdService {
     }
 
     public static void log(final RcdLogLevel logLevel, final RcdLogTheme theme, final Object... args) {
-        RcdContext.getService(RcdLogService.class).instLog(logLevel, theme, args);
+        RcdContext.getService(RcdLogService.class)
+                .instLog(logLevel, theme, args);
     }
 
     public void instLog(final RcdLogLevel logLevel, final RcdLogTheme theme, final Object... args);
