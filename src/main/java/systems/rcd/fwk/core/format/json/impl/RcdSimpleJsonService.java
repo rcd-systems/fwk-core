@@ -1,9 +1,7 @@
 package systems.rcd.fwk.core.format.json.impl;
 
 import java.io.IOException;
-import java.text.NumberFormat;
 import java.util.Iterator;
-import java.util.Locale;
 
 import systems.rcd.fwk.core.format.json.RcdJsonService;
 import systems.rcd.fwk.core.format.json.data.RcdJsonArray;
@@ -19,8 +17,6 @@ import systems.rcd.fwk.core.format.json.impl.data.RcdSimpleJsonObject;
 import systems.rcd.fwk.core.format.json.impl.data.RcdSimpleJsonString;
 
 public class RcdSimpleJsonService implements RcdJsonService {
-    private static NumberFormat numberFormat = NumberFormat.getInstance(Locale.ENGLISH);
-
     @Override
     public RcdJsonBoolean instCreateJsonValue(final Boolean value) {
         return new RcdSimpleJsonBoolean(value);
@@ -60,7 +56,7 @@ public class RcdSimpleJsonService implements RcdJsonService {
             break;
         case NUMBER:
             final Number numberValue = ((RcdJsonNumber) value).getValue();
-            output.append(numberFormat.format(numberValue));
+            output.append(numberValue.toString());
             break;
         case STRING:
             output.append("\"")
@@ -73,7 +69,9 @@ public class RcdSimpleJsonService implements RcdJsonService {
             for (final Iterator<java.util.Map.Entry<String, RcdJsonValue>> iterator = jsonObject.entrySet()
                     .iterator(); iterator.hasNext();) {
                 final java.util.Map.Entry<String, RcdJsonValue> jsonData = iterator.next();
-                output.append(jsonData.getKey())
+                output.append("\"")
+                .append(jsonData.getKey())
+                .append("\"")
                 .append(":");
                 instToJson(jsonData.getValue(), output);
                 if (iterator.hasNext()) {
@@ -89,7 +87,7 @@ public class RcdSimpleJsonService implements RcdJsonService {
                 final RcdJsonValue jsonValue = iterator.next();
                 instToJson(jsonValue, output);
                 if (iterator.hasNext()) {
-                    output.append(',');
+                    output.append(",\n");
                 }
             }
             output.append("]");
