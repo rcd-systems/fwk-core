@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
+import systems.rcd.fwk.core.format.csv.RcdCsvService;
+import systems.rcd.fwk.core.format.csv.impl.RcdSimpleCsvService;
 import systems.rcd.fwk.core.format.json.RcdJsonService;
 import systems.rcd.fwk.core.format.json.impl.RcdSimpleJsonService;
 import systems.rcd.fwk.core.io.file.RcdFileService;
@@ -24,6 +26,7 @@ public class RcdContext {
         setGlobalServiceSupplier(RcdLogService.class, () -> new RcdPrintStreamLogService());
         setGlobalServiceSupplier(RcdFileService.class, () -> new RcdNioFileService());
         setGlobalServiceSupplier(RcdJsonService.class, () -> new RcdSimpleJsonService());
+        setGlobalServiceSupplier(RcdCsvService.class, () -> new RcdSimpleCsvService());
     }
 
     private final Map<Class<? extends RcdService>, RcdService> serviceMap;
