@@ -6,10 +6,15 @@
 *.ear
 hs_err_pid*
 
-# Specific extensions
+
+# Eclipse exceptions
 .classpath
 .project
 .settings/
+
+# Maven exceptions
 target/
+
+# IntelliJ exceptions
 *.iml
 .idea/*
