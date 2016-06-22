@@ -1,4 +1,5 @@
 package systems.rcd.fwk.core.ctx;
 
-public interface RcdService {
+public interface RcdService
+{
 }
