@@ -2,7 +2,6 @@ package systems.rcd.fwk.core.ctx;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import systems.rcd.fwk.core.format.csv.RcdCsvService;
@@ -16,14 +15,14 @@ import systems.rcd.fwk.core.log.impl.RcdPrintStreamLogService;
 
 public class RcdContext
 {
-    private static final RcdContext globalContext = new RcdContext( new ConcurrentHashMap<>(), new ConcurrentHashMap<>() );
+    private static final RcdContext globalContext = new RcdContext();
 
     private static final ThreadLocal<RcdContext> threadLocalContext = new ThreadLocal<RcdContext>()
     {
         @Override
         protected RcdContext initialValue()
         {
-            return new RcdContext( new HashMap<>(), new HashMap<>() );
+            return new RcdContext();
         }
     };
 
@@ -35,31 +34,33 @@ public class RcdContext
         setGlobalServiceSupplier( RcdCsvService.class, () -> new RcdSimpleCsvService() );
     }
 
-    private final Map<Class<? extends RcdService>, RcdService> serviceMap;
+    private final Map<Class<? extends RcdService>, RcdService> serviceMap = new HashMap<>();
 
-    private final Map<Class<? extends RcdService>, Supplier<? extends RcdService>> serviceSupplierMap;
+    private final Map<Class<? extends RcdService>, Supplier<? extends RcdService>> serviceSupplierMap = new HashMap<>();
 
-    private RcdContext( final Map<Class<? extends RcdService>, RcdService> serviceMap,
-                        final Map<Class<? extends RcdService>, Supplier<? extends RcdService>> serviceSupplierMap )
+    private RcdContext()
     {
-        this.serviceMap = serviceMap;
-        this.serviceSupplierMap = serviceSupplierMap;
     }
 
     @SuppressWarnings("unchecked")
     public static <T extends RcdService> T getService( final Class<T> serviceClass )
     {
-
-        final T service = (T) threadLocalContext.get().serviceMap.computeIfAbsent( serviceClass, key -> {
-            final Supplier<T> supplier = (Supplier<T>) threadLocalContext.get().serviceSupplierMap.get( key );
-            return supplier == null ? null : supplier.get();
-        } );
-        if ( service == null )
-        {
-            return (T) globalContext.serviceMap.computeIfAbsent( serviceClass, key -> {
-                final Supplier<T> supplier = (Supplier<T>) globalContext.serviceSupplierMap.get( key );
+        final T service = (T) threadLocalContext.get().
+            serviceMap.
+            computeIfAbsent( serviceClass, key -> {
+                final Supplier<T> supplier = (Supplier<T>) threadLocalContext.get().serviceSupplierMap.get( key );
                 return supplier == null ? null : supplier.get();
             } );
+
+        if ( service == null )
+        {
+            synchronized ( globalContext )
+            {
+                return (T) globalContext.serviceMap.computeIfAbsent( serviceClass, key -> {
+                    final Supplier<T> supplier = (Supplier<T>) globalContext.serviceSupplierMap.get( key );
+                    return supplier == null ? null : supplier.get();
+                } );
+            }
         }
         return service;
     }
@@ -71,7 +72,10 @@ public class RcdContext
 
     public static <T extends RcdService> void setGlobalServiceSupplier( final Class<T> serviceClass, final Supplier<T> serviceSupplier )
     {
-        globalContext.serviceSupplierMap.put( serviceClass, serviceSupplier );
+        synchronized ( globalContext )
+        {
+            globalContext.serviceSupplierMap.put( serviceClass, serviceSupplier );
+        }
     }
 
     public <T extends RcdService> void removeService( final Class<T> serviceClass )
@@ -81,9 +85,12 @@ public class RcdContext
             threadLocalContext.get().serviceMap.remove( serviceClass );
         }
 
-        if ( globalContext.serviceSupplierMap.remove( serviceClass ) != null )
+        synchronized ( globalContext )
         {
-            globalContext.serviceMap.remove( serviceClass );
+            if ( globalContext.serviceSupplierMap.remove( serviceClass ) != null )
+            {
+                globalContext.serviceMap.remove( serviceClass );
+            }
         }
     }
 }
