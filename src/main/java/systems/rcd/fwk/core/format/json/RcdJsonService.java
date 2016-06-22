@@ -14,38 +14,37 @@ import systems.rcd.fwk.core.format.json.data.RcdJsonValue;
 public interface RcdJsonService
     extends RcdService
 {
-
-    public static RcdJsonBoolean createJsonValue( final Boolean value )
+    static RcdJsonBoolean createJsonValue( final Boolean value )
     {
         return RcdContext.getService( RcdJsonService.class ).instCreateJsonValue( value );
     }
 
-    public static RcdJsonNumber createJsonValue( final Number value )
+    static RcdJsonNumber createJsonValue( final Number value )
     {
         return RcdContext.getService( RcdJsonService.class ).instCreateJsonValue( value );
     }
 
-    public static RcdJsonString createJsonValue( final String value )
+    static RcdJsonString createJsonValue( final String value )
     {
         return RcdContext.getService( RcdJsonService.class ).instCreateJsonValue( value );
     }
 
-    public static RcdJsonObject createJsonObject()
+    static RcdJsonObject createJsonObject()
     {
         return RcdContext.getService( RcdJsonService.class ).instCreateJsonObject();
     }
 
-    public static RcdJsonArray createJsonArray()
+    static RcdJsonArray createJsonArray()
     {
         return RcdContext.getService( RcdJsonService.class ).instCreateJsonArray();
     }
 
-    public static String toJson( final RcdJsonValue value )
+    static String toString( final RcdJsonValue value )
     {
         final StringBuilder sb = new StringBuilder();
         try
         {
-            RcdContext.getService( RcdJsonService.class ).instToJson( value, sb );
+            RcdContext.getService( RcdJsonService.class ).instToString( value, sb );
         }
         catch ( final IOException e )
         {
@@ -63,7 +62,7 @@ public interface RcdJsonService
 
     RcdJsonArray instCreateJsonArray();
 
-    void instToJson( RcdJsonValue value, Appendable output )
+    void instToString( RcdJsonValue value, Appendable output )
         throws IOException;
 
 }

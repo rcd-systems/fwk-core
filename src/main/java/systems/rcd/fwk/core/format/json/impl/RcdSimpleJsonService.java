@@ -50,7 +50,7 @@ public class RcdSimpleJsonService
     }
 
     @Override
-    public void instToJson( final RcdJsonValue value, final Appendable output )
+    public void instToString( final RcdJsonValue value, final Appendable output )
         throws IOException
     {
         if ( value == null )
@@ -80,7 +80,7 @@ public class RcdSimpleJsonService
                 {
                     final java.util.Map.Entry<String, RcdJsonValue> jsonData = iterator.next();
                     output.append( "\"" ).append( jsonData.getKey() ).append( "\"" ).append( ":" );
-                    instToJson( jsonData.getValue(), output );
+                    instToString( jsonData.getValue(), output );
                     if ( iterator.hasNext() )
                     {
                         output.append( ',' );
@@ -94,10 +94,10 @@ public class RcdSimpleJsonService
                 for ( final Iterator<RcdJsonValue> iterator = jsonArray.iterator(); iterator.hasNext(); )
                 {
                     final RcdJsonValue jsonValue = iterator.next();
-                    instToJson( jsonValue, output );
+                    instToString( jsonValue, output );
                     if ( iterator.hasNext() )
                     {
-                        output.append( ",\n" );
+                        output.append( ",\n" ); //TODO Add pretty print configuration to this service
                     }
                 }
                 output.append( "]" );

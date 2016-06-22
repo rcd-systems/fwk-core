@@ -9,7 +9,6 @@ import systems.rcd.fwk.core.format.xls.data.RcdXlsWorkbook;
 public interface RcdXlsService
     extends RcdService
 {
-
     static RcdXlsWorkbook read( final Path path )
         throws Exception
     {
