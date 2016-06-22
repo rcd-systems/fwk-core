@@ -1,10 +1,15 @@
 package systems.rcd.fwk.core.format.json.data;
 
-public interface RcdJsonString extends RcdJsonValue {
+public interface RcdJsonString
+    extends RcdJsonValue
+{
     @Override
-    default RcdJsonValueType getType() {
+    default RcdJsonValueType getType()
+    {
         return RcdJsonValueType.STRING;
-    };
+    }
+
+    ;
 
     String getValue();
 }

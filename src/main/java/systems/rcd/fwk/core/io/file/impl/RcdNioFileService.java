@@ -11,31 +11,41 @@ import java.util.stream.Stream;
 
 import systems.rcd.fwk.core.io.file.RcdFileService;
 
-public class RcdNioFileService implements RcdFileService {
+public class RcdNioFileService
+    implements RcdFileService
+{
     private final Charset charset = StandardCharsets.UTF_8;
 
     @Override
-    public String instReadAsString(final Path path) throws IOException {
-        final byte[] allBytes = Files.readAllBytes(path);
-        return new String(allBytes, charset);
+    public String instReadAsString( final Path path )
+        throws IOException
+    {
+        final byte[] allBytes = Files.readAllBytes( path );
+        return new String( allBytes, charset );
     }
 
     @Override
-    public void instReadAsStream(final Path path, final Consumer<Stream<String>> reader) throws IOException {
-        try (final Stream<String> lines = Files.lines(path, charset)) {
-            reader.accept(lines);
+    public void instReadAsStream( final Path path, final Consumer<Stream<String>> reader )
+        throws IOException
+    {
+        try (final Stream<String> lines = Files.lines( path, charset ))
+        {
+            reader.accept( lines );
         }
     }
 
     @Override
-    public void instWrite(final Path path, final String content) throws IOException {
-        final byte[] bytes = content.getBytes(charset);
-        Files.write(path, bytes, StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+    public void instWrite( final Path path, final String content )
+        throws IOException
+    {
+        final byte[] bytes = content.getBytes( charset );
+        Files.write( path, bytes, StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.APPEND );
     }
 
     @Override
-    public void instWrite(final Path path, final Iterable<String> content) throws IOException {
-        Files.write(path, content, charset, StandardOpenOption.WRITE, StandardOpenOption.CREATE,
-                StandardOpenOption.APPEND);
+    public void instWrite( final Path path, final Iterable<String> content )
+        throws IOException
+    {
+        Files.write( path, content, charset, StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.APPEND );
     }
 }

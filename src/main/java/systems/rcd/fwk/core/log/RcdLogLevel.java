@@ -1,5 +1,6 @@
 package systems.rcd.fwk.core.log;
 
-public enum RcdLogLevel {
+public enum RcdLogLevel
+{
     DEBUG, INFO, WARN, ERROR, FATAL
 }

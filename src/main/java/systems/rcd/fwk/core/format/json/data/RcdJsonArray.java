@@ -2,17 +2,22 @@ package systems.rcd.fwk.core.format.json.data;
 
 import java.util.List;
 
-public interface RcdJsonArray extends RcdJsonValue, List<RcdJsonValue> {
+public interface RcdJsonArray
+    extends RcdJsonValue, List<RcdJsonValue>
+{
     @Override
-    default RcdJsonValueType getType() {
+    default RcdJsonValueType getType()
+    {
         return RcdJsonValueType.ARRAY;
-    };
+    }
 
-    public RcdJsonArray add(Boolean element);
+    ;
 
-    public RcdJsonArray add(Number element);
+    public RcdJsonArray add( Boolean element );
 
-    public RcdJsonArray add(String element);
+    public RcdJsonArray add( Number element );
+
+    public RcdJsonArray add( String element );
 
     public RcdJsonObject createObject();
 
