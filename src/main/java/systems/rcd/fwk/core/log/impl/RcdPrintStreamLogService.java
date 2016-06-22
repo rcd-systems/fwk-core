@@ -21,7 +21,7 @@ public class RcdPrintStreamLogService
 
     private RcdLogLevel logLevelThreshold = DEFAULT_LOG_LEVEL_THRESHOLD;
 
-    private final boolean logTime = true;
+    private boolean logTime = true;
 
     private boolean logLogLevel = true;
 
@@ -112,6 +112,12 @@ public class RcdPrintStreamLogService
     public RcdPrintStreamLogService setLogLevelThreshold( final RcdLogLevel logLevelThreshold )
     {
         this.logLevelThreshold = logLevelThreshold;
+        return this;
+    }
+
+    public RcdPrintStreamLogService setLogTime( final boolean logTime )
+    {
+        this.logTime = logTime;
         return this;
     }
 

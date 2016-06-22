@@ -28,7 +28,9 @@ public class RcdLogLevelTest
         final RcdLogTheme theme = new RcdLogTheme( "Theme" );
 
         final PrintStream printStream = new PrintStream( byteArrayOutputStream );
-        ( (RcdPrintStreamLogService) RcdContext.getService( RcdLogService.class ) ).setPrintStream( printStream );
+        ( (RcdPrintStreamLogService) RcdContext.getService( RcdLogService.class ) ).
+            setLogTime( false ).
+            setPrintStream( printStream );
 
         RcdLogService.debug( theme, "A message" );
         checkOutput( "" );
@@ -45,9 +47,10 @@ public class RcdLogLevelTest
         RcdLogService.fatal( theme, "A message", new NullPointerException() );
         byteArrayOutputStream.reset();
 
-        ( (RcdPrintStreamLogService) RcdContext.getService( RcdLogService.class ) ).setLevelThreshold( theme,
-                                                                                                       RcdLogLevel.DEBUG ).setLogLogLevel(
-            false ).setLogTheme( false );
+        ( (RcdPrintStreamLogService) RcdContext.getService( RcdLogService.class ) ).
+            setLevelThreshold( theme, RcdLogLevel.DEBUG ).
+            setLogLogLevel( false ).
+            setLogTheme( false );
 
         RcdLogService.debug( theme, "A message" );
         checkOutput( "A message" + System.lineSeparator() );
