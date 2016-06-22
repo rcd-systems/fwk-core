@@ -7,7 +7,7 @@ import systems.rcd.fwk.core.format.csv.RcdCsvService;
 import systems.rcd.fwk.core.format.csv.data.RcdCsvDocument;
 import systems.rcd.fwk.core.format.csv.impl.data.RcdSimpleCsvDocument;
 import systems.rcd.fwk.core.format.csv.impl.data.RcdSimpleCsvRow;
-import systems.rcd.fwk.core.io.file.RcdFileService;
+import systems.rcd.fwk.core.io.file.RcdTextFileService;
 
 public class RcdSimpleCsvService
     implements RcdCsvService
@@ -20,7 +20,7 @@ public class RcdSimpleCsvService
         throws Exception
     {
         final RcdCsvDocument csvDocument = new RcdSimpleCsvDocument();
-        RcdFileService.readAsStream( path, lines -> {
+        RcdTextFileService.readAsStream( path, lines -> {
             lines.map( line -> new RcdSimpleCsvRow( Arrays.asList( line.split( separator ) ) ) ).forEach( csvDocument::add );
         } );
         return csvDocument;

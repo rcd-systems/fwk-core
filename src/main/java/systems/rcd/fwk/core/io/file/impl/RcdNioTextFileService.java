@@ -9,10 +9,10 @@ import java.nio.file.StandardOpenOption;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import systems.rcd.fwk.core.io.file.RcdFileService;
+import systems.rcd.fwk.core.io.file.RcdTextFileService;
 
-public class RcdNioFileService
-    implements RcdFileService
+public class RcdNioTextFileService
+    implements RcdTextFileService
 {
     private final Charset charset = StandardCharsets.UTF_8;
 

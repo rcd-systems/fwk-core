@@ -29,13 +29,13 @@ public class RcdFileTest
         final File temporaryFile2 = temporaryFolder.newFile();
         final File temporaryFile3 = temporaryFolder.newFile();
 
-        RcdFileService.write( temporaryFile1.toPath(), winContent );
-        RcdFileService.write( temporaryFile2.toPath(), unixContent );
-        RcdFileService.write( temporaryFile3.toPath(), lineList );
+        RcdTextFileService.write( temporaryFile1.toPath(), winContent );
+        RcdTextFileService.write( temporaryFile2.toPath(), unixContent );
+        RcdTextFileService.write( temporaryFile3.toPath(), lineList );
 
-        Assert.assertEquals( winContent, RcdFileService.readAsString( temporaryFile1.toPath() ) );
-        Assert.assertEquals( unixContent, RcdFileService.readAsString( temporaryFile2.toPath() ) );
-        RcdFileService.readAsStream( temporaryFile3.toPath(), lines -> {
+        Assert.assertEquals( winContent, RcdTextFileService.readAsString( temporaryFile1.toPath() ) );
+        Assert.assertEquals( unixContent, RcdTextFileService.readAsString( temporaryFile2.toPath() ) );
+        RcdTextFileService.readAsStream( temporaryFile3.toPath(), lines -> {
             final List<String> actualList = lines.collect( Collectors.toList() );
             Assert.assertEquals( lineList, actualList );
         } );
