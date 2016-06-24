@@ -10,12 +10,10 @@ public interface RcdXlsService
     extends RcdService
 {
     static RcdXlsWorkbook read( final Path path )
-        throws Exception
     {
         return RcdContext.getService( RcdXlsService.class ).instRead( path );
     }
 
-    RcdXlsWorkbook instRead( Path path )
-        throws Exception;
+    RcdXlsWorkbook instRead( Path path );
 
 }
