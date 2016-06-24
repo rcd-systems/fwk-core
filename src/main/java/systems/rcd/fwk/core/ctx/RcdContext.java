@@ -8,7 +8,9 @@ import systems.rcd.fwk.core.format.csv.RcdCsvService;
 import systems.rcd.fwk.core.format.csv.impl.RcdSimpleCsvService;
 import systems.rcd.fwk.core.format.json.RcdJsonService;
 import systems.rcd.fwk.core.format.json.impl.RcdSimpleJsonService;
+import systems.rcd.fwk.core.io.file.RcdFileService;
 import systems.rcd.fwk.core.io.file.RcdTextFileService;
+import systems.rcd.fwk.core.io.file.impl.RcdNioFileService;
 import systems.rcd.fwk.core.io.file.impl.RcdNioTextFileService;
 import systems.rcd.fwk.core.log.RcdLogService;
 import systems.rcd.fwk.core.log.impl.RcdPrintStreamLogService;
@@ -29,6 +31,7 @@ public class RcdContext
     static
     {
         setGlobalServiceSupplier( RcdLogService.class, () -> new RcdPrintStreamLogService() );
+        setGlobalServiceSupplier( RcdFileService.class, () -> new RcdNioFileService() );
         setGlobalServiceSupplier( RcdTextFileService.class, () -> new RcdNioTextFileService() );
         setGlobalServiceSupplier( RcdJsonService.class, () -> new RcdSimpleJsonService() );
         setGlobalServiceSupplier( RcdCsvService.class, () -> new RcdSimpleCsvService() );
