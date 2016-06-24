@@ -1,8 +1,7 @@
 package systems.rcd.fwk.core.io.file;
 
 import java.nio.file.Path;
-import java.util.function.Function;
-import java.util.stream.Stream;
+import java.util.function.Consumer;
 
 import systems.rcd.fwk.core.ctx.RcdContext;
 import systems.rcd.fwk.core.ctx.RcdService;
@@ -10,10 +9,10 @@ import systems.rcd.fwk.core.ctx.RcdService;
 public interface RcdFileService
     extends RcdService
 {
-    static <T> T listSubPaths( final Path path, final Function<Stream<Path>, T> function )
+    static void listSubPaths( final Path path, final Consumer<Path> pathConsumer )
     {
-        return RcdContext.getService( RcdFileService.class ).instListSubPaths( path, function );
+        RcdContext.getService( RcdFileService.class ).instListSubPaths( path, pathConsumer );
     }
 
-    <T> T instListSubPaths( Path path, Function<Stream<Path>, T> consumer );
+    void instListSubPaths( Path path, final Consumer<Path> pathConsumer );
 }

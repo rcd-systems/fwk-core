@@ -1,6 +1,6 @@
 package systems.rcd.fwk.core.io.file;
 
-import java.util.stream.Stream;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -20,9 +20,9 @@ public class RcdFileTest
         temporaryFolder.newFile();
         temporaryFolder.newFile();
 
-        final long numSubPaths = RcdFileService.listSubPaths( temporaryFolder.getRoot().toPath(), Stream::count );
-        Assert.assertEquals( 3l, numSubPaths );
+        final AtomicInteger nbSubPaths = new AtomicInteger();
+        RcdFileService.listSubPaths( temporaryFolder.getRoot().toPath(), p -> nbSubPaths.incrementAndGet() );
 
-
+        Assert.assertEquals( 3, nbSubPaths.get() );
     }
 }
