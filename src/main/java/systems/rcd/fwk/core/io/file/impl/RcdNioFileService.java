@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -60,4 +61,31 @@ public class RcdNioFileService
             throw new RcdException( "Error while deleting directory [" + directory + "]", e );
         }
     }
+
+
+    @Override
+    public long instGetDirectorySize( final Path directory )
+    {
+        try
+        {
+            final AtomicLong size = new AtomicLong();
+            Files.walkFileTree( directory, new SimpleFileVisitor<Path>()
+            {
+                @Override
+                public FileVisitResult visitFile( Path file, BasicFileAttributes attrs )
+                    throws IOException
+                {
+                    size.addAndGet( attrs.size() );
+                    return FileVisitResult.CONTINUE;
+                }
+            } );
+            return size.longValue();
+        }
+        catch ( IOException e )
+        {
+            throw new RcdException( "Error while deleting directory [" + directory + "]", e );
+        }
+    }
+
+
 }

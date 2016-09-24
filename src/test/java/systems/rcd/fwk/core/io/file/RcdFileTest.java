@@ -25,6 +25,10 @@ public class RcdFileTest
         RcdFileService.listSubPaths( temporaryFolder.getRoot().toPath(), p -> nbSubPaths.incrementAndGet() );
         Assert.assertEquals( 3, nbSubPaths.get() );
 
+        RcdTextFileService.write( lastFile.toPath(), "content" );
+        final long directorySize = RcdFileService.getDirectorySize( temporaryFolder.getRoot().toPath() );
+        Assert.assertEquals( 7l, directorySize );
+
         RcdFileService.deleteDirectory( lastFile.toPath() );
         nbSubPaths.set( 0 );
         RcdFileService.listSubPaths( temporaryFolder.getRoot().toPath(), p -> nbSubPaths.incrementAndGet() );
