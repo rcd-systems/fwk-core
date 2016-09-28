@@ -1,9 +1,9 @@
 package systems.rcd.fwk.core.format.json.data;
 
-import java.util.Map;
+import java.util.Set;
 
 public interface RcdJsonObject
-    extends RcdJsonValue, Map<String, RcdJsonValue>
+    extends RcdJsonValue
 {
     @Override
     default RcdJsonValueType getType()
@@ -11,15 +11,19 @@ public interface RcdJsonObject
         return RcdJsonValueType.OBJECT;
     }
 
-    ;
+    RcdJsonObject put( String key, Boolean value );
 
-    public RcdJsonObject put( String key, Boolean value );
+    RcdJsonObject put( String key, Number value );
 
-    public RcdJsonObject put( String key, Number value );
+    RcdJsonObject put( String key, String value );
 
-    public RcdJsonObject put( String key, String value );
+    RcdJsonObject put( String key, RcdJsonValue value );
 
-    public RcdJsonObject createObject( String key );
+    RcdJsonObject createObject( String key );
 
-    public RcdJsonArray createArray( String key );
+    RcdJsonArray createArray( String key );
+
+    Set<String> getKeys();
+
+    RcdJsonValue get( final String key );
 }

@@ -75,12 +75,11 @@ public class RcdSimpleJsonService
             case OBJECT:
                 final RcdJsonObject jsonObject = (RcdJsonObject) value;
                 output.append( "{" );
-                for ( final Iterator<java.util.Map.Entry<String, RcdJsonValue>> iterator = jsonObject.entrySet().iterator();
-                      iterator.hasNext(); )
+                for ( final Iterator<String> iterator = jsonObject.getKeys().iterator(); iterator.hasNext(); )
                 {
-                    final java.util.Map.Entry<String, RcdJsonValue> jsonData = iterator.next();
-                    output.append( "\"" ).append( jsonData.getKey() ).append( "\"" ).append( ":" );
-                    instToString( jsonData.getValue(), output );
+                    final String key = iterator.next();
+                    output.append( "\"" ).append( key ).append( "\"" ).append( ":" );
+                    instToString( jsonObject.get( key ), output );
                     if ( iterator.hasNext() )
                     {
                         output.append( ',' );
