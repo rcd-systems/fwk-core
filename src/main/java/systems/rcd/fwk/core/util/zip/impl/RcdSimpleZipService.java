@@ -22,37 +22,40 @@ public class RcdSimpleZipService
     static final int BUFFER_SIZE = 2048;
 
     @Override
-    public void instZipDirectory( final Path directory, final Path target )
+    public void instZipDirectory( final Path target, final Path... sources )
     {
         try (ZipOutputStream zipOutputStream = new ZipOutputStream( new BufferedOutputStream( new FileOutputStream( target.toFile() ) ) ))
         {
             byte buffer[] = new byte[BUFFER_SIZE];
 
-            Files.walkFileTree( directory, new SimpleFileVisitor<Path>()
+            for ( Path source : sources )
             {
-                @Override
-                public FileVisitResult visitFile( Path file, BasicFileAttributes attrs )
-                    throws IOException
+                Files.walkFileTree( source, new SimpleFileVisitor<Path>()
                 {
-                    try (BufferedInputStream inputStream = new BufferedInputStream( new FileInputStream( file.toFile() ), BUFFER_SIZE ))
+                    @Override
+                    public FileVisitResult visitFile( Path file, BasicFileAttributes attrs )
+                        throws IOException
                     {
-                        final ZipEntry zipEntry =
-                            new ZipEntry( directory.getFileName().resolve( directory.relativize( file ) ).toString() );
-                        zipOutputStream.putNextEntry( zipEntry );
-                        int count;
-                        while ( ( count = inputStream.read( buffer, 0, BUFFER_SIZE ) ) != -1 )
+                        try (BufferedInputStream inputStream = new BufferedInputStream( new FileInputStream( file.toFile() ), BUFFER_SIZE ))
                         {
-                            zipOutputStream.write( buffer, 0, count );
+                            final ZipEntry zipEntry = new ZipEntry( source.getFileName().resolve( source.relativize( file ) ).toString() );
+                            zipOutputStream.putNextEntry( zipEntry );
+                            int count;
+                            while ( ( count = inputStream.read( buffer, 0, BUFFER_SIZE ) ) != -1 )
+                            {
+                                zipOutputStream.write( buffer, 0, count );
+                            }
                         }
-                    }
 
-                    return FileVisitResult.CONTINUE;
-                }
-            } );
+                        return FileVisitResult.CONTINUE;
+                    }
+                } );
+            }
+
         }
         catch ( IOException e )
         {
-            throw new RcdException( "Error while zipping " + directory.toString(), e );
+            throw new RcdException( "Error while zipping files", e );
         }
     }
 }

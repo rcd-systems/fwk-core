@@ -8,12 +8,12 @@ import systems.rcd.fwk.core.ctx.RcdService;
 public interface RcdZipService
     extends RcdService
 {
-    static void zipDirectory( final Path directory, final Path target )
+    static void zipDirectory( final Path target, final Path... sources )
     {
-        RcdContext.getService( RcdZipService.class ).instZipDirectory( directory, target );
+        RcdContext.getService( RcdZipService.class ).instZipDirectory( target, sources );
 
     }
 
-    void instZipDirectory( final Path directory, final Path target );
+    void instZipDirectory( final Path directory, final Path... sources );
 }
    
