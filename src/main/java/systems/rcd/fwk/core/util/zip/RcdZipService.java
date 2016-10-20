@@ -14,6 +14,14 @@ public interface RcdZipService
 
     }
 
+    static void unzipDirectory( final Path source, final Path target )
+    {
+        RcdContext.getService( RcdZipService.class ).instUnzipDirectory( source, target );
+
+    }
+
     void instZipDirectory( final Path directory, final Path... sources );
+
+    void instUnzipDirectory( final Path source, final Path target );
 }
    

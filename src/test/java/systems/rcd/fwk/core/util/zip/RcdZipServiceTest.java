@@ -25,11 +25,16 @@ public class RcdZipServiceTest
         final File tgtDirectory = temporaryFolder.newFolder( "tgt" );
         final File textFile = temporaryFolder.newFile( "src/subFolder/text.txt" );
         RcdTextFileService.write( textFile.toPath(), "mycontent" );
+        final File srcBisDirectory = temporaryFolder.newFolder( "srcbis" );
 
         final Path zipFilePath = tgtDirectory.toPath().resolve( "myzip.zip" );
         RcdZipService.zipDirectory( zipFilePath, srcDirectory.toPath(), textFile.toPath() );
 
         System.out.println( tgtDirectory.toString() );
         Assert.assertTrue( RcdFileService.getDirectorySize( tgtDirectory.toPath() ) > 0 );
+
+        RcdZipService.unzipDirectory( zipFilePath, srcBisDirectory.toPath() );
+        System.out.println( srcBisDirectory.toString() );
+        Assert.assertEquals( "mycontent", RcdTextFileService.readAsString( srcBisDirectory.toPath().resolve( "text.txt" ) ) );
     }
 }
