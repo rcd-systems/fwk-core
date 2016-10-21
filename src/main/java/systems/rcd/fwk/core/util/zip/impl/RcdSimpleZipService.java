@@ -25,7 +25,7 @@ public class RcdSimpleZipService
     static final int BUFFER_SIZE = 2048;
 
     @Override
-    public void instZipDirectory( final Path target, final Path... sources )
+    public void instZip( final Path target, final Path... sources )
     {
         try (ZipOutputStream zipOutputStream = new ZipOutputStream( new BufferedOutputStream( new FileOutputStream( target.toFile() ) ) ))
         {
@@ -63,7 +63,7 @@ public class RcdSimpleZipService
     }
 
     @Override
-    public void instUnzipDirectory( final Path source, final Path target )
+    public void instUnzip( final Path source, final Path target )
     {
         try (ZipInputStream zipInputStream = new ZipInputStream( new BufferedInputStream( new FileInputStream( source.toFile() ) ) ))
         {

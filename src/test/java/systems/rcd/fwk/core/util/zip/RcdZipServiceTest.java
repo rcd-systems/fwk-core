@@ -21,20 +21,23 @@ public class RcdZipServiceTest
         throws Exception
     {
         final File srcDirectory = temporaryFolder.newFolder( "src" );
-        temporaryFolder.newFolder( "src", "subFolder" );
         final File tgtDirectory = temporaryFolder.newFolder( "tgt" );
-        final File textFile = temporaryFolder.newFile( "src/subFolder/text.txt" );
-        RcdTextFileService.write( textFile.toPath(), "mycontent" );
-        final File srcBisDirectory = temporaryFolder.newFolder( "srcbis" );
+        final File srcBisDirectory = temporaryFolder.newFolder( "src-bis" );
 
-        final Path zipFilePath = tgtDirectory.toPath().resolve( "myzip.zip" );
-        RcdZipService.zipDirectory( zipFilePath, srcDirectory.toPath(), textFile.toPath() );
+        temporaryFolder.newFolder( "src", "folder1" );
+        final File file1 = temporaryFolder.newFile( "src/folder1/file1.txt" );
+        final File file2 = temporaryFolder.newFile( "src/file2.txt" );
+        RcdTextFileService.write( file1.toPath(), "content" );
+        RcdTextFileService.write( file2.toPath(), "content2" );
 
-        System.out.println( tgtDirectory.toString() );
-        Assert.assertTrue( RcdFileService.getSize( tgtDirectory.toPath() ) > 0 );
+        //Tests zip and unzip
+        final Path zipPath = tgtDirectory.toPath().resolve( "srcAndFile2.zip" );
+        RcdZipService.zip( zipPath, srcDirectory.toPath(), file2.toPath() );
+        Assert.assertTrue( RcdFileService.getSize( zipPath ) > 0 );
+        RcdZipService.unzip( zipPath, srcBisDirectory.toPath() );
 
-        RcdZipService.unzipDirectory( zipFilePath, srcBisDirectory.toPath() );
-        System.out.println( srcBisDirectory.toString() );
-        Assert.assertEquals( "mycontent", RcdTextFileService.readAsString( srcBisDirectory.toPath().resolve( "text.txt" ) ) );
+        Assert.assertEquals( 23l, RcdFileService.getSize( srcBisDirectory.toPath() ) );
+        final Path unzipedFile1Path = srcBisDirectory.toPath().resolve( "src/folder1/file1.txt" );
+        Assert.assertEquals( "content", RcdTextFileService.readAsString( unzipedFile1Path ) );
     }
 }
