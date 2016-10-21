@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,7 +20,6 @@ import java.util.zip.ZipOutputStream;
 import systems.rcd.fwk.core.exc.RcdException;
 import systems.rcd.fwk.core.util.zip.RcdZipService;
 
-//TODO Rewrite properly
 public class RcdSimpleZipService
     implements RcdZipService
 {
@@ -39,14 +40,16 @@ public class RcdSimpleZipService
                     public FileVisitResult visitFile( Path file, BasicFileAttributes attrs )
                         throws IOException
                     {
-                        try (BufferedInputStream inputStream = new BufferedInputStream( new FileInputStream( file.toFile() ), BUFFER_SIZE ))
+                        final Path relativeFilePath = source.getFileName().resolve( source.relativize( file ) );
+                        final ZipEntry zipEntry = new ZipEntry( relativeFilePath.toString() );
+                        zipOutputStream.putNextEntry( zipEntry );
+
+                        try (InputStream inputStream = new BufferedInputStream( new FileInputStream( file.toFile() ), BUFFER_SIZE ))
                         {
-                            final ZipEntry zipEntry = new ZipEntry( source.getFileName().resolve( source.relativize( file ) ).toString() );
-                            zipOutputStream.putNextEntry( zipEntry );
-                            int count;
-                            while ( ( count = inputStream.read( buffer, 0, BUFFER_SIZE ) ) != -1 )
+                            int bytesCount;
+                            while ( ( bytesCount = inputStream.read( buffer, 0, BUFFER_SIZE ) ) != -1 )
                             {
-                                zipOutputStream.write( buffer, 0, count );
+                                zipOutputStream.write( buffer, 0, bytesCount );
                             }
                         }
 
@@ -67,28 +70,28 @@ public class RcdSimpleZipService
     {
         try (ZipInputStream zipInputStream = new ZipInputStream( new BufferedInputStream( new FileInputStream( source.toFile() ) ) ))
         {
+            byte buffer[] = new byte[BUFFER_SIZE];
 
             ZipEntry entry;
             while ( ( entry = zipInputStream.getNextEntry() ) != null )
             {
-                int count;
-                byte buffer[] = new byte[BUFFER_SIZE];
                 final File targetFile = target.resolve( entry.getName() ).toFile();
                 targetFile.getParentFile().mkdirs();
                 targetFile.createNewFile();
-                FileOutputStream fos = new FileOutputStream( targetFile );
-                BufferedOutputStream dest = new BufferedOutputStream( fos, BUFFER_SIZE );
-                while ( ( count = zipInputStream.read( buffer, 0, BUFFER_SIZE ) ) != -1 )
+
+                try (OutputStream outputStream = new BufferedOutputStream( new FileOutputStream( targetFile ), BUFFER_SIZE );)
                 {
-                    dest.write( buffer, 0, count );
+                    int bytesCount;
+                    while ( ( bytesCount = zipInputStream.read( buffer, 0, BUFFER_SIZE ) ) != -1 )
+                    {
+                        outputStream.write( buffer, 0, bytesCount );
+                    }
                 }
-                dest.flush();
-                dest.close();
             }
         }
         catch ( IOException e )
         {
-            throw new RcdException( "Error while zipping files", e );
+            throw new RcdException( "Error while unzipping files", e );
         }
     }
 }

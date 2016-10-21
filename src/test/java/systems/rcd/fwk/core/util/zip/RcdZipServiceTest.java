@@ -37,7 +37,7 @@ public class RcdZipServiceTest
         RcdZipService.unzip( zipPath, srcBisDirectory.toPath() );
 
         Assert.assertEquals( 23l, RcdFileService.getSize( srcBisDirectory.toPath() ) );
-        final Path unzipedFile1Path = srcBisDirectory.toPath().resolve( "src/folder1/file1.txt" );
-        Assert.assertEquals( "content", RcdTextFileService.readAsString( unzipedFile1Path ) );
+        final Path unzippedFile1Path = srcBisDirectory.toPath().resolve( "src/folder1/file1.txt" );
+        Assert.assertEquals( "content", RcdTextFileService.readAsString( unzippedFile1Path ) );
     }
 }
