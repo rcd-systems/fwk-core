@@ -31,7 +31,7 @@ public class RcdZipServiceTest
         RcdZipService.zipDirectory( zipFilePath, srcDirectory.toPath(), textFile.toPath() );
 
         System.out.println( tgtDirectory.toString() );
-        Assert.assertTrue( RcdFileService.getDirectorySize( tgtDirectory.toPath() ) > 0 );
+        Assert.assertTrue( RcdFileService.getSize( tgtDirectory.toPath() ) > 0 );
 
         RcdZipService.unzipDirectory( zipFilePath, srcBisDirectory.toPath() );
         System.out.println( srcBisDirectory.toString() );

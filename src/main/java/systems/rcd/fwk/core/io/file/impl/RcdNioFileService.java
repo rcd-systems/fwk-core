@@ -32,11 +32,11 @@ public class RcdNioFileService
     }
 
     @Override
-    public void instDeleteDirectory( final Path directory )
+    public void instDelete( final Path path )
     {
         try
         {
-            Files.walkFileTree( directory, new SimpleFileVisitor<Path>()
+            Files.walkFileTree( path, new SimpleFileVisitor<Path>()
             {
                 @Override
                 public FileVisitResult visitFile( Path file, BasicFileAttributes attrs )
@@ -58,18 +58,18 @@ public class RcdNioFileService
         }
         catch ( IOException e )
         {
-            throw new RcdException( "Error while deleting directory [" + directory + "]", e );
+            throw new RcdException( "Error while deleting path [" + path + "]", e );
         }
     }
 
 
     @Override
-    public long instGetDirectorySize( final Path directory )
+    public long instGetSize( final Path path )
     {
         try
         {
             final AtomicLong size = new AtomicLong();
-            Files.walkFileTree( directory, new SimpleFileVisitor<Path>()
+            Files.walkFileTree( path, new SimpleFileVisitor<Path>()
             {
                 @Override
                 public FileVisitResult visitFile( Path file, BasicFileAttributes attrs )
@@ -83,7 +83,7 @@ public class RcdNioFileService
         }
         catch ( IOException e )
         {
-            throw new RcdException( "Error while deleting directory [" + directory + "]", e );
+            throw new RcdException( "Error while getting size of [" + path + "]", e );
         }
     }
 

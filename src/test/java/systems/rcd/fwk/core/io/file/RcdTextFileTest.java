@@ -5,11 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-
-import junit.framework.Assert;
 
 public class RcdTextFileTest
 {
@@ -20,7 +19,6 @@ public class RcdTextFileTest
     public void test()
         throws Exception
     {
-
         final List<String> lineList = Arrays.asList( new String[]{"Some content", "こんにちわ", "æøå"} );
         final String winContent = "Some content\r\nこんにちわ\r\næøå";
         final String unixContent = "Some content\nこんにちわ\næøå";

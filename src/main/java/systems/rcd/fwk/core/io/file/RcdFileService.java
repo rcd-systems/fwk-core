@@ -14,19 +14,19 @@ public interface RcdFileService
         RcdContext.getService( RcdFileService.class ).instListSubPaths( path, pathConsumer );
     }
 
-    static void deleteDirectory( final Path directory )
+    static void delete( final Path directory )
     {
-        RcdContext.getService( RcdFileService.class ).instDeleteDirectory( directory );
+        RcdContext.getService( RcdFileService.class ).instDelete( directory );
     }
 
-    static long getDirectorySize( final Path directory )
+    static long getSize( final Path directory )
     {
-        return RcdContext.getService( RcdFileService.class ).instGetDirectorySize( directory );
+        return RcdContext.getService( RcdFileService.class ).instGetSize( directory );
     }
 
     void instListSubPaths( final Path path, final Consumer<Path> pathConsumer );
     
-    void instDeleteDirectory( final Path directory );
+    void instDelete( final Path directory );
 
-    long instGetDirectorySize( final Path directory );
+    long instGetSize( final Path directory );
 }

@@ -1,6 +1,7 @@
 package systems.rcd.fwk.core.io.file;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
@@ -13,25 +14,42 @@ public class RcdFileTest
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
+    final AtomicInteger counter = new AtomicInteger();
+
     @Test
     public void test()
         throws Exception
     {
-        temporaryFolder.newFile();
-        temporaryFolder.newFile();
-        final File lastFile = temporaryFolder.newFile();
+        final File folder1 = temporaryFolder.newFolder( "folder1" );
+        temporaryFolder.newFolder( "folder2" );
+        temporaryFolder.newFile( "folder1/file1" );
+        final File file2 = temporaryFolder.newFile( "folder1/file2" );
+        final File file3 = temporaryFolder.newFile( "folder2/file3" );
+        RcdTextFileService.write( file2.toPath(), "content" );
+        RcdTextFileService.write( file3.toPath(), "content2" );
 
-        final AtomicInteger nbSubPaths = new AtomicInteger();
-        RcdFileService.listSubPaths( temporaryFolder.getRoot().toPath(), p -> nbSubPaths.incrementAndGet() );
-        Assert.assertEquals( 3, nbSubPaths.get() );
+        //Tests listSubPaths
+        assertSubPathCount( 2, folder1.toPath() );
 
-        RcdTextFileService.write( lastFile.toPath(), "content" );
-        final long directorySize = RcdFileService.getDirectorySize( temporaryFolder.getRoot().toPath() );
-        Assert.assertEquals( 7l, directorySize );
+        //Tests getSize for a file and directory
+        final long directorySize = RcdFileService.getSize( temporaryFolder.getRoot().toPath() );
+        final long fileSize = RcdFileService.getSize( file2.toPath() );
+        Assert.assertEquals( 7l, fileSize );
+        Assert.assertEquals( 15l, directorySize );
 
-        RcdFileService.deleteDirectory( lastFile.toPath() );
-        nbSubPaths.set( 0 );
-        RcdFileService.listSubPaths( temporaryFolder.getRoot().toPath(), p -> nbSubPaths.incrementAndGet() );
-        Assert.assertEquals( 2, nbSubPaths.get() );
+        //Tests delete for a file and directory
+        assertSubPathCount( 2, folder1.toPath() );
+        RcdFileService.delete( file2.toPath() );
+        assertSubPathCount( 1, folder1.toPath() );
+        assertSubPathCount( 2, temporaryFolder.getRoot().toPath() );
+        RcdFileService.delete( folder1.toPath() );
+        assertSubPathCount( 1, temporaryFolder.getRoot().toPath() );
+    }
+
+    private void assertSubPathCount( final int expectedCount, final Path path )
+    {
+        counter.set( 0 );
+        RcdFileService.listSubPaths( path, p -> counter.incrementAndGet() );
+        Assert.assertEquals( expectedCount, counter.get() );
     }
 }
