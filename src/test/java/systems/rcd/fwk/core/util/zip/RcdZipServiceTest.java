@@ -1,7 +1,13 @@
 package systems.rcd.fwk.core.util.zip;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
+import java.util.zip.ZipEntry;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -40,4 +46,42 @@ public class RcdZipServiceTest
         final Path unzippedFile1Path = srcBisDirectory.toPath().resolve( "src/folder1/file1.txt" );
         Assert.assertEquals( "content", RcdTextFileService.readAsString( unzippedFile1Path ) );
     }
+
+    @Test
+    public void testUnzip()
+        throws IOException, URISyntaxException
+    {
+        final File tgtDirectory = temporaryFolder.newFolder( "rcd" );
+        final Path path = Paths.get( getClass().getResource( "rcd.zip" ).toURI() );
+        RcdZipService.unzip( path, tgtDirectory.toPath() );
+    }
+
+    @Test
+    public void testUnzipMacOs()
+        throws IOException, URISyntaxException
+    {
+        final File tgtDirectory = temporaryFolder.newFolder( "macos" );
+        final Path zipFile = Paths.get( getClass().getResource( "macos.zip" ).toURI() );
+        RcdZipService.unzip( zipFile, tgtDirectory.toPath() );
+
+        final AtomicInteger counter = new AtomicInteger();
+        RcdFileService.listSubPaths( tgtDirectory.toPath(), path -> counter.incrementAndGet() );
+        Assert.assertEquals( 2, counter.get() );
+    }
+
+    @Test
+    public void testUnzipMacOsFiltered()
+        throws IOException, URISyntaxException
+    {
+        final File tgtDirectory = temporaryFolder.newFolder( "macos-filtered" );
+        final Path zipPath = Paths.get( getClass().getResource( "macos.zip" ).toURI() );
+        Predicate<ZipEntry> filter = zipEntry -> !zipEntry.getName().startsWith( "__MACOSX/" );
+        RcdZipService.unzip( zipPath, tgtDirectory.toPath(), filter );
+
+        final AtomicInteger counter = new AtomicInteger();
+        RcdFileService.listSubPaths( tgtDirectory.toPath(), path -> counter.incrementAndGet() );
+        Assert.assertEquals( 1, counter.get() );
+    }
 }
+
+

@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.function.Predicate;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -66,7 +67,7 @@ public class RcdSimpleZipService
     }
 
     @Override
-    public void instUnzip( final Path source, final Path target )
+    public void instUnzip( final Path source, final Path target, final Predicate<ZipEntry> filter )
     {
         try (ZipInputStream zipInputStream = new ZipInputStream( new BufferedInputStream( new FileInputStream( source.toFile() ) ) ))
         {
@@ -75,18 +76,30 @@ public class RcdSimpleZipService
             ZipEntry entry;
             while ( ( entry = zipInputStream.getNextEntry() ) != null )
             {
+                if ( filter != null && !filter.test( entry ) )
+                {
+                    continue;
+                }
+
                 final File targetFile = target.resolve( entry.getName() ).toFile();
                 targetFile.getParentFile().mkdirs();
-                targetFile.createNewFile();
-
-                try (OutputStream outputStream = new BufferedOutputStream( new FileOutputStream( targetFile ), BUFFER_SIZE );)
+                if ( entry.isDirectory() )
                 {
-                    int bytesCount;
-                    while ( ( bytesCount = zipInputStream.read( buffer, 0, BUFFER_SIZE ) ) != -1 )
+                    targetFile.mkdir();
+                }
+                else
+                {
+                    targetFile.createNewFile();
+                    try (OutputStream outputStream = new BufferedOutputStream( new FileOutputStream( targetFile ), BUFFER_SIZE );)
                     {
-                        outputStream.write( buffer, 0, bytesCount );
+                        int bytesCount;
+                        while ( ( bytesCount = zipInputStream.read( buffer, 0, BUFFER_SIZE ) ) != -1 )
+                        {
+                            outputStream.write( buffer, 0, bytesCount );
+                        }
                     }
                 }
+
             }
         }
         catch ( IOException e )
