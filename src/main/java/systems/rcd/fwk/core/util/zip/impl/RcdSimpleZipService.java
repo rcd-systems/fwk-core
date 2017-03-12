@@ -19,6 +19,7 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import systems.rcd.fwk.core.exc.RcdException;
+import systems.rcd.fwk.core.io.path.RcdPathService;
 import systems.rcd.fwk.core.util.zip.RcdZipService;
 
 public class RcdSimpleZipService
@@ -42,7 +43,8 @@ public class RcdSimpleZipService
                         throws IOException
                     {
                         final Path relativeFilePath = source.getFileName().resolve( source.relativize( file ) );
-                        final ZipEntry zipEntry = new ZipEntry( relativeFilePath.toString() );
+                        final String relativeUnixPathString = RcdPathService.toUnixPathString( relativeFilePath );
+                        final ZipEntry zipEntry = new ZipEntry( relativeUnixPathString );
                         zipOutputStream.putNextEntry( zipEntry );
 
                         try (InputStream inputStream = new BufferedInputStream( new FileInputStream( file.toFile() ), BUFFER_SIZE ))
