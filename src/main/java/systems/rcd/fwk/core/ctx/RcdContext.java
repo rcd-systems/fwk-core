@@ -12,6 +12,8 @@ import systems.rcd.fwk.core.io.file.RcdFileService;
 import systems.rcd.fwk.core.io.file.RcdTextFileService;
 import systems.rcd.fwk.core.io.file.impl.RcdNioFileService;
 import systems.rcd.fwk.core.io.file.impl.RcdNioTextFileService;
+import systems.rcd.fwk.core.io.path.RcdPathService;
+import systems.rcd.fwk.core.io.path.impl.RcdSimplePathService;
 import systems.rcd.fwk.core.log.RcdLogService;
 import systems.rcd.fwk.core.log.impl.RcdPrintStreamLogService;
 import systems.rcd.fwk.core.util.zip.RcdZipService;
@@ -38,6 +40,7 @@ public class RcdContext
         setGlobalServiceSupplier( RcdJsonService.class, () -> new RcdSimpleJsonService() );
         setGlobalServiceSupplier( RcdCsvService.class, () -> new RcdSimpleCsvService() );
         setGlobalServiceSupplier( RcdZipService.class, () -> new RcdSimpleZipService() );
+        setGlobalServiceSupplier( RcdPathService.class, () -> new RcdSimplePathService() );
     }
 
     private final Map<Class<? extends RcdService>, RcdService> serviceMap = new HashMap<>();
