@@ -3,6 +3,7 @@ package systems.rcd.fwk.core.format.csv.impl;
 import java.nio.file.Path;
 import java.util.Arrays;
 
+import systems.rcd.fwk.core.exc.RcdException;
 import systems.rcd.fwk.core.format.csv.RcdCsvService;
 import systems.rcd.fwk.core.format.csv.data.RcdCsvDocument;
 import systems.rcd.fwk.core.format.csv.impl.data.RcdSimpleCsvDocument;
@@ -17,13 +18,19 @@ public class RcdSimpleCsvService
 
     @Override
     public RcdCsvDocument instRead( final Path path )
-        throws Exception
     {
         final RcdCsvDocument csvDocument = new RcdSimpleCsvDocument();
-        RcdTextFileService.readAsStream( path, lines -> {
-            lines.map( line -> new RcdSimpleCsvRow( Arrays.asList( line.split( separator ) ) ) ).forEach( csvDocument::add );
-        } );
-        return csvDocument;
+        try
+        {
+            RcdTextFileService.readAsStream( path, lines -> {
+                lines.map( line -> new RcdSimpleCsvRow( Arrays.asList( line.split( separator ) ) ) ).forEach( csvDocument::add );
+            } );
+            return csvDocument;
+        }
+        catch ( Exception e )
+        {
+            throw new RcdException( "Error while reading CSV document", e );
+        }
     }
 
     public RcdSimpleCsvService setSeparator( final String separator )

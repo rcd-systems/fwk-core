@@ -15,6 +15,5 @@ public interface RcdCsvService
         return RcdContext.getService( RcdCsvService.class ).instRead( path );
     }
 
-    RcdCsvDocument instRead( Path path )
-        throws Exception;
+    RcdCsvDocument instRead( Path path );
 }
