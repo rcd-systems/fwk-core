@@ -13,6 +13,7 @@ import systems.rcd.fwk.core.io.file.RcdTextFileService;
 public class RcdSimplePropertiesService
     implements RcdPropertiesService
 {
+    //Space after property value is ignore and backslashes are ignored
     private final static Pattern PATTERN = Pattern.compile( "^\\s*([^\\s#!]+)\\s*=\\s*(\\S+)" );
 
     @Override
