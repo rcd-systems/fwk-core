@@ -13,7 +13,7 @@ import systems.rcd.fwk.core.io.file.RcdTextFileService;
 public class RcdSimplePropertiesService
     implements RcdPropertiesService
 {
-    private final static Pattern PATTERN = Pattern.compile( "\\s*([^\\s#!]+)\\s*=\\s*(\\S+)\\s*" );
+    private final static Pattern PATTERN = Pattern.compile( "^\\s*([^\\s#!]+)\\s*=\\s*(\\S+)" );
 
     @Override
     public Map<String, String> instRead( final Path path )
@@ -24,7 +24,7 @@ public class RcdSimplePropertiesService
             RcdTextFileService.readAsStream( path, lines -> {
                 lines.forEach( line -> {
                     final Matcher matcher = PATTERN.matcher( line );
-                    if ( matcher.matches() )
+                    if ( matcher.find() )
                     {
                         properties.put( matcher.group( 1 ), matcher.group( 2 ) );
                     }
