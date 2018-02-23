@@ -1,0 +1,1 @@
+{"aString":"string value\nsecond\tline:\"quoted/text\"","aInteger":42,"aFloat":3.14,"anArrayOfString":["first","second"],"subObject":{"subObjectField":"value"}}

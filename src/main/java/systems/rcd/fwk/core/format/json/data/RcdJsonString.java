@@ -9,7 +9,5 @@ public interface RcdJsonString
         return RcdJsonValueType.STRING;
     }
 
-    ;
-
     String getValue();
 }

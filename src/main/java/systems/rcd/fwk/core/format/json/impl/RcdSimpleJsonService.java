@@ -70,7 +70,9 @@ public class RcdSimpleJsonService
                 output.append( numberValue.toString() );
                 break;
             case STRING:
-                output.append( "\"" ).append( ( (RcdJsonString) value ).getValue() ).append( "\"" );
+                output.append( "\"" ).
+                    append( escapeString( ( (RcdJsonString) value ).getValue() ) ).
+                    append( "\"" );
                 break;
             case OBJECT:
                 final RcdJsonObject jsonObject = (RcdJsonObject) value;
@@ -96,11 +98,23 @@ public class RcdSimpleJsonService
                     instToString( jsonValue, output );
                     if ( iterator.hasNext() )
                     {
-                        output.append( ",\n" ); //TODO Add pretty print configuration to this service
+                        output.append( "," ); //TODO Add pretty print configuration to this service
                     }
                 }
                 output.append( "]" );
                 break;
         }
+    }
+
+    private String escapeString( String string )
+    {
+        return string.replaceAll( "\b", "\\\\b" ).
+            replaceAll( "\f", "\\\\f" ).
+            replaceAll( "\n", "\\\\n" ).
+            replaceAll( "\r", "\\\\r" ).
+            replaceAll( "\t", "\\\\t" ).
+            replaceAll( "\"", "\\\\\"" ).
+            replaceAll( "\\{2}", "\\\\" ).
+            replaceAll( "/", "\\/" );
     }
 }
