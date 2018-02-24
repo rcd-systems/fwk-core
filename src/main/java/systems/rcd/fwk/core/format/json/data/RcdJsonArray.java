@@ -11,15 +11,13 @@ public interface RcdJsonArray
         return RcdJsonValueType.ARRAY;
     }
 
-    ;
+    RcdJsonArray add( Boolean element );
 
-    public RcdJsonArray add( Boolean element );
+    RcdJsonArray add( Number element );
 
-    public RcdJsonArray add( Number element );
+    RcdJsonArray add( String element );
 
-    public RcdJsonArray add( String element );
+    RcdJsonObject createObject();
 
-    public RcdJsonObject createObject();
-
-    public RcdJsonArray createArray();
+    RcdJsonArray createArray();
 }

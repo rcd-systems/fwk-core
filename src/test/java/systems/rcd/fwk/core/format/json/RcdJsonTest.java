@@ -20,6 +20,8 @@ public class RcdJsonTest
             put( "aString", "string value\nsecond\tline:\"quoted/text\"" ).
             put( "aInteger", 42 ).
             put( "aFloat", 3.14 ).
+            put( "aBoolean", true ).
+            put( "aNullValue", (String) null ).
             put( "anArrayOfString", RcdJsonService.createJsonArray().
                 add( "first" ).
                 add( "second" ) ).

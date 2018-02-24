@@ -9,7 +9,5 @@ public interface RcdJsonBoolean
         return RcdJsonValueType.BOOLEAN;
     }
 
-    ;
-
     Boolean getValue();
 }

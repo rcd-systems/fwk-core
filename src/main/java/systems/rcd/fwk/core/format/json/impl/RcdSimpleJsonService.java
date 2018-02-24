@@ -19,6 +19,8 @@ import systems.rcd.fwk.core.format.json.impl.data.RcdSimpleJsonString;
 public class RcdSimpleJsonService
     implements RcdJsonService
 {
+    private static final String NULL_VALUE = "null";
+
     @Override
     public RcdJsonBoolean instCreateJsonValue( final Boolean value )
     {
@@ -55,7 +57,7 @@ public class RcdSimpleJsonService
     {
         if ( value == null )
         {
-            output.append( "null" );
+            output.append( NULL_VALUE );
             return;
         }
 
@@ -63,16 +65,24 @@ public class RcdSimpleJsonService
         {
             case BOOLEAN:
                 final Boolean booleanValue = ( (RcdJsonBoolean) value ).getValue();
-                output.append( booleanValue.toString() );
+                output.append( booleanValue == null ? NULL_VALUE : booleanValue.toString() );
                 break;
             case NUMBER:
                 final Number numberValue = ( (RcdJsonNumber) value ).getValue();
-                output.append( numberValue.toString() );
+                output.append( numberValue == null ? NULL_VALUE : numberValue.toString() );
                 break;
             case STRING:
-                output.append( "\"" ).
-                    append( escapeString( ( (RcdJsonString) value ).getValue() ) ).
-                    append( "\"" );
+                final String stringValue = ( (RcdJsonString) value ).getValue();
+                if ( stringValue == null )
+                {
+                    output.append( NULL_VALUE );
+                }
+                else
+                {
+                    output.append( "\"" ).
+                        append( escapeString( stringValue ) ).
+                        append( "\"" );
+                }
                 break;
             case OBJECT:
                 final RcdJsonObject jsonObject = (RcdJsonObject) value;

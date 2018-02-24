@@ -9,7 +9,6 @@ public interface RcdJsonNumber
         return RcdJsonValueType.NUMBER;
     }
 
-    ;
 
     Number getValue();
 }
