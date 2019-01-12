@@ -23,7 +23,19 @@ public interface RcdJsonObject
 
     RcdJsonArray createArray( String key );
 
+    boolean hasKey( String key );
+
     Set<String> getKeys();
 
     RcdJsonValue get( final String key );
+
+    Boolean getBoolean( final String key );
+
+    Number getNumber( final String key );
+
+    String getString( final String key );
+
+    RcdJsonArray getArray( final String key );
+
+    RcdJsonObject getObject( final String key );
 }

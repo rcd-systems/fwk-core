@@ -5,7 +5,10 @@ import java.util.Map;
 import java.util.Set;
 
 import systems.rcd.fwk.core.format.json.data.RcdJsonArray;
+import systems.rcd.fwk.core.format.json.data.RcdJsonBoolean;
+import systems.rcd.fwk.core.format.json.data.RcdJsonNumber;
 import systems.rcd.fwk.core.format.json.data.RcdJsonObject;
+import systems.rcd.fwk.core.format.json.data.RcdJsonString;
 import systems.rcd.fwk.core.format.json.data.RcdJsonValue;
 
 public class RcdSimpleJsonObject
@@ -58,6 +61,12 @@ public class RcdSimpleJsonObject
     }
 
     @Override
+    public boolean hasKey( final String key )
+    {
+        return internalMap.containsKey( key );
+    }
+
+    @Override
     public Set<String> getKeys()
     {
         return internalMap.keySet();
@@ -67,5 +76,60 @@ public class RcdSimpleJsonObject
     public RcdJsonValue get( final String key )
     {
         return internalMap.get( key );
+    }
+
+    @Override
+    public Boolean getBoolean( final String key )
+    {
+        final RcdJsonValue value = get( key );
+        if ( value instanceof RcdJsonBoolean )
+        {
+            return ( (RcdJsonBoolean) value ).getValue();
+        }
+        return null;
+    }
+
+    @Override
+    public Number getNumber( final String key )
+    {
+        final RcdJsonValue value = get( key );
+        if ( value instanceof RcdJsonNumber )
+        {
+            return ( (RcdJsonNumber) value ).getValue();
+        }
+        return null;
+    }
+
+    @Override
+    public String getString( final String key )
+    {
+        final RcdJsonValue value = get( key );
+        if ( value instanceof RcdJsonString )
+        {
+            return ( (RcdJsonString) value ).getValue();
+        }
+        return null;
+    }
+
+    @Override
+    public RcdJsonArray getArray( final String key )
+    {
+        final RcdJsonValue value = get( key );
+        if ( value instanceof RcdJsonArray )
+        {
+            return ( (RcdJsonArray) value );
+        }
+        return null;
+    }
+
+    @Override
+    public RcdJsonObject getObject( final String key )
+    {
+        final RcdJsonValue value = get( key );
+        if ( value instanceof RcdJsonObject )
+        {
+            return (RcdJsonObject) value;
+        }
+        return null;
     }
 }

@@ -20,4 +20,14 @@ public interface RcdJsonArray
     RcdJsonObject createObject();
 
     RcdJsonArray createArray();
+
+    Boolean getBoolean( final int index );
+
+    Number getNumber( final int index );
+
+    String getString( final int index );
+
+    RcdJsonArray getArray( final int index );
+
+    RcdJsonObject getObject( final int index );
 }
