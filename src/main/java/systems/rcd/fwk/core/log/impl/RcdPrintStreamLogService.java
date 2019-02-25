@@ -62,6 +62,12 @@ public class RcdPrintStreamLogService
         }
     }
 
+    @Override
+    public RcdLogTheme instCreateLogTheme( final String theme )
+    {
+        return new RcdLogTheme( theme );
+    }
+
     private boolean mustLog( final RcdLogLevel logLevel, final RcdLogTheme theme )
     {
         return logLevel.ordinal() >= getLogLevelThreshold( theme ).ordinal();
