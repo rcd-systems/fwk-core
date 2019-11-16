@@ -1,5 +1,6 @@
 package systems.rcd.fwk.core.format.csv.params;
 
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 
 import systems.rcd.fwk.core.util.zip.Preconditions;
@@ -7,6 +8,8 @@ import systems.rcd.fwk.core.util.zip.Preconditions;
 public class RcdReadCsvDocumentParams
 {
     private Path path;
+
+    private Charset charset;
 
     private String separator;
 
@@ -16,6 +19,7 @@ public class RcdReadCsvDocumentParams
     {
         Preconditions.checkNotNull( builder.path, "Path cannot be null" );
         path = builder.path;
+        charset = builder.charset;
         separator = builder.separator == null ? "," : builder.separator;
         skipHeader = builder.skipHeader;
     }
@@ -23,6 +27,11 @@ public class RcdReadCsvDocumentParams
     public Path getPath()
     {
         return path;
+    }
+
+    public Charset getCharset()
+    {
+        return charset;
     }
 
     public String getSeparator()
@@ -44,6 +53,8 @@ public class RcdReadCsvDocumentParams
     {
         private Path path;
 
+        private Charset charset;
+
         private String separator;
 
         private boolean skipHeader = false;
@@ -55,6 +66,12 @@ public class RcdReadCsvDocumentParams
         public Builder path( final Path path )
         {
             this.path = path;
+            return this;
+        }
+
+        public Builder charset( final Charset charset )
+        {
+            this.charset = charset;
             return this;
         }
 

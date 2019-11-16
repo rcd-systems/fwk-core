@@ -21,6 +21,7 @@ public class RcdSimpleCsvService
         {
             final RcdReadTextFileParams readTextFileParams = RcdReadTextFileParams.newBuilder().
                 path( params.getPath() ).
+                charset( params.getCharset() ).
                 linesConsumer( lines -> {
                     lines.map( line -> toRow( params, line ) ).
                         forEach( csvDocument::add );

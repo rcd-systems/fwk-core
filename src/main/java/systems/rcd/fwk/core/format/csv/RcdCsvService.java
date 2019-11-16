@@ -9,7 +9,6 @@ public interface RcdCsvService
     extends RcdService
 {
     static RcdCsvDocument read( final RcdReadCsvDocumentParams params )
-        throws Exception
     {
         return RcdContext.getService( RcdCsvService.class ).instRead( params );
     }
