@@ -1,30 +1,32 @@
 package systems.rcd.fwk.core.format.csv.impl;
 
-import java.nio.file.Path;
 import java.util.Arrays;
 
 import systems.rcd.fwk.core.exc.RcdException;
 import systems.rcd.fwk.core.format.csv.RcdCsvService;
-import systems.rcd.fwk.core.format.csv.data.RcdCsvDocument;
 import systems.rcd.fwk.core.format.csv.impl.data.RcdSimpleCsvDocument;
 import systems.rcd.fwk.core.format.csv.impl.data.RcdSimpleCsvRow;
+import systems.rcd.fwk.core.format.csv.params.RcdReadCsvDocumentParams;
 import systems.rcd.fwk.core.io.file.RcdTextFileService;
+import systems.rcd.fwk.core.io.file.params.RcdReadTextFileParams;
 
 public class RcdSimpleCsvService
     implements RcdCsvService
 {
-
-    private String separator = ",";
-
     @Override
-    public RcdCsvDocument instRead( final Path path )
+    public RcdSimpleCsvDocument instRead( final RcdReadCsvDocumentParams params )
     {
-        final RcdCsvDocument csvDocument = new RcdSimpleCsvDocument();
+        final RcdSimpleCsvDocument csvDocument = new RcdSimpleCsvDocument();
         try
         {
-            RcdTextFileService.readAsStream( path, lines -> {
-                lines.map( line -> new RcdSimpleCsvRow( Arrays.asList( line.split( separator ) ) ) ).forEach( csvDocument::add );
-            } );
+            final RcdReadTextFileParams readTextFileParams = RcdReadTextFileParams.newBuilder().
+                path( params.getPath() ).
+                linesConsumer( lines -> {
+                    lines.map( line -> toRow( params, line ) ).
+                        forEach( csvDocument::add );
+                } ).
+                build();
+            RcdTextFileService.read( readTextFileParams );
             return csvDocument;
         }
         catch ( Exception e )
@@ -33,10 +35,8 @@ public class RcdSimpleCsvService
         }
     }
 
-    public RcdSimpleCsvService setSeparator( final String separator )
+    private RcdSimpleCsvRow toRow( final RcdReadCsvDocumentParams params, final String line )
     {
-        this.separator = separator;
-        return this;
+        return new RcdSimpleCsvRow( Arrays.asList( line.split( params.getSeparator() ) ) );
     }
-
 }

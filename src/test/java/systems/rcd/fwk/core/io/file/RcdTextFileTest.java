@@ -10,6 +10,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import systems.rcd.fwk.core.io.file.params.RcdReadTextFileParams;
+import systems.rcd.fwk.core.io.file.params.RcdWriteTextFileParams;
+
 public class RcdTextFileTest
 {
     @Rule
@@ -27,16 +30,30 @@ public class RcdTextFileTest
         final File temporaryFile2 = temporaryFolder.newFile();
         final File temporaryFile3 = temporaryFolder.newFile();
 
-        RcdTextFileService.write( temporaryFile1.toPath(), winContent );
-        RcdTextFileService.write( temporaryFile2.toPath(), unixContent );
-        RcdTextFileService.write( temporaryFile3.toPath(), lineList );
+        RcdTextFileService.write( RcdWriteTextFileParams.newBuilder().
+            path( temporaryFile1.toPath() ).
+            content( winContent ).
+            build() );
+        RcdTextFileService.write( RcdWriteTextFileParams.newBuilder().
+            path( temporaryFile2.toPath() ).
+            content( unixContent ).
+            build() );
+        RcdTextFileService.write( RcdWriteTextFileParams.newBuilder().
+            path( temporaryFile3.toPath() ).
+            contentLines( lineList ).
+            build() );
 
-        Assert.assertEquals( winContent, RcdTextFileService.readAsString( temporaryFile1.toPath() ) );
-        Assert.assertEquals( unixContent, RcdTextFileService.readAsString( temporaryFile2.toPath() ) );
-        RcdTextFileService.readAsStream( temporaryFile3.toPath(), lines -> {
-            final List<String> actualList = lines.collect( Collectors.toList() );
-            Assert.assertEquals( lineList, actualList );
-        } );
-
+        RcdTextFileService.read( RcdReadTextFileParams.newBuilder().
+            path( temporaryFile1.toPath() ).
+            contentConsumer( content -> Assert.assertEquals( winContent, content ) ).
+            build() );
+        RcdTextFileService.read( RcdReadTextFileParams.newBuilder().
+            path( temporaryFile2.toPath() ).
+            contentConsumer( content -> Assert.assertEquals( unixContent, content ) ).
+            build() );
+        RcdTextFileService.read( RcdReadTextFileParams.newBuilder().
+            path( temporaryFile3.toPath() ).
+            linesConsumer( lines -> Assert.assertEquals( lineList, lines.collect( Collectors.toList() ) ) ).
+            build() );
     }
 }

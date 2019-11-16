@@ -16,6 +16,8 @@ import org.junit.rules.TemporaryFolder;
 
 import systems.rcd.fwk.core.io.file.RcdFileService;
 import systems.rcd.fwk.core.io.file.RcdTextFileService;
+import systems.rcd.fwk.core.io.file.params.RcdReadTextFileParams;
+import systems.rcd.fwk.core.io.file.params.RcdWriteTextFileParams;
 
 public class RcdZipServiceTest
 {
@@ -33,8 +35,8 @@ public class RcdZipServiceTest
         temporaryFolder.newFolder( "src", "folder1" );
         final File file1 = temporaryFolder.newFile( "src/folder1/file1.txt" );
         final File file2 = temporaryFolder.newFile( "src/file2.txt" );
-        RcdTextFileService.write( file1.toPath(), "content" );
-        RcdTextFileService.write( file2.toPath(), "content2" );
+        RcdTextFileService.write( RcdWriteTextFileParams.from( file1.toPath(), "content" ) );
+        RcdTextFileService.write( RcdWriteTextFileParams.from( file2.toPath(), "content2" ) );
 
         //Tests zip and unzip
         final Path zipPath = tgtDirectory.toPath().resolve( "srcAndFile2.zip" );
@@ -44,7 +46,10 @@ public class RcdZipServiceTest
 
         Assert.assertEquals( 23l, RcdFileService.getSize( srcBisDirectory.toPath() ) );
         final Path unzippedFile1Path = srcBisDirectory.toPath().resolve( "src/folder1/file1.txt" );
-        Assert.assertEquals( "content", RcdTextFileService.readAsString( unzippedFile1Path ) );
+        RcdTextFileService.read( RcdReadTextFileParams.newBuilder().
+            path( unzippedFile1Path ).
+            contentConsumer( content -> Assert.assertEquals( "content", content ) ).
+            build() );
     }
 
     @Test

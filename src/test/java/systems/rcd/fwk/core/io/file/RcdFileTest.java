@@ -9,6 +9,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import systems.rcd.fwk.core.io.file.params.RcdWriteTextFileParams;
+
 public class RcdFileTest
 {
     @Rule
@@ -25,8 +27,8 @@ public class RcdFileTest
         temporaryFolder.newFile( "folder1/file1" );
         final File file2 = temporaryFolder.newFile( "folder1/file2" );
         final File file3 = temporaryFolder.newFile( "folder2/file3" );
-        RcdTextFileService.write( file2.toPath(), "content" );
-        RcdTextFileService.write( file3.toPath(), "content2" );
+        RcdTextFileService.write( RcdWriteTextFileParams.from( file2.toPath(), "content" ) );
+        RcdTextFileService.write( RcdWriteTextFileParams.from( file3.toPath(), "content2" ) );
 
         //Tests listSubPaths
         assertSubPathCount( 2, folder1.toPath() );
