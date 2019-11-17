@@ -23,7 +23,8 @@ public class RcdSimpleCsvService
                 path( params.getPath() ).
                 charset( params.getCharset() ).
                 linesConsumer( lines -> {
-                    lines.map( line -> toRow( params, line ) ).
+                    lines.skip( params.isSkipHeader() ? 1 : 0 ).
+                        map( line -> toRow( params, line ) ).
                         forEach( csvDocument::add );
                 } ).
                 build();
