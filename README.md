@@ -1,4 +1,1 @@
-# fwk-core
-Rcd Framework Core
-
-IN PROGRESS!
+# Rcd Framework Core (fwk-core)
