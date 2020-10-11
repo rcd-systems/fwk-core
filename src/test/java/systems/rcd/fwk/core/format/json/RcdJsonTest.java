@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import systems.rcd.fwk.core.format.json.data.RcdJsonObject;
 import systems.rcd.fwk.core.io.file.RcdTextFileService;
+import systems.rcd.fwk.core.io.file.params.RcdReadTextFileParams;
 
 public class RcdJsonTest
 {
@@ -29,8 +30,9 @@ public class RcdJsonTest
                 put( "subObjectField", "value" ) );
 
         final Path expectedPath = Paths.get( getClass().getResource( "expected.json" ).toURI() );
-        final String expected = RcdTextFileService.readAsString( expectedPath );
-
-        Assert.assertEquals( expected, RcdJsonService.toString( jsonObject ) );
+        RcdTextFileService.read( RcdReadTextFileParams.newBuilder().
+            path( expectedPath ).
+            contentConsumer( content -> Assert.assertEquals( content, RcdJsonService.toString( jsonObject ) ) ).
+            build() );
     }
 }

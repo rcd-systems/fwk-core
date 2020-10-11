@@ -62,5 +62,12 @@ public interface RcdLogService
         RcdContext.getService( RcdLogService.class ).instLog( logLevel, theme, args );
     }
 
+    static RcdLogTheme createLogTheme( final String theme )
+    {
+        return RcdContext.getService( RcdLogService.class ).instCreateLogTheme( theme );
+    }
+
     void instLog( final RcdLogLevel logLevel, final RcdLogTheme theme, final Object... args );
+
+    RcdLogTheme instCreateLogTheme( String theme );
 }

@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import systems.rcd.fwk.core.exc.RcdException;
 import systems.rcd.fwk.core.format.properties.RcdPropertiesService;
 import systems.rcd.fwk.core.io.file.RcdTextFileService;
+import systems.rcd.fwk.core.io.file.params.RcdReadTextFileParams;
 
 public class RcdSimplePropertiesService
     implements RcdPropertiesService
@@ -19,18 +20,22 @@ public class RcdSimplePropertiesService
     @Override
     public Map<String, String> instRead( final Path path )
     {
-        Map<String, String> properties = new HashMap<>();
+        final Map<String, String> properties = new HashMap<>();
         try
         {
-            RcdTextFileService.readAsStream( path, lines -> {
-                lines.forEach( line -> {
-                    final Matcher matcher = PATTERN.matcher( line );
-                    if ( matcher.find() )
-                    {
-                        properties.put( matcher.group( 1 ), matcher.group( 2 ) );
-                    }
-                } );
-            } );
+            final RcdReadTextFileParams textFileParams = RcdReadTextFileParams.newBuilder().
+                path( path ).
+                linesConsumer( lines -> {
+                    lines.forEach( line -> {
+                        final Matcher matcher = PATTERN.matcher( line );
+                        if ( matcher.find() )
+                        {
+                            properties.put( matcher.group( 1 ), matcher.group( 2 ) );
+                        }
+                    } );
+                } ).
+                build();
+            RcdTextFileService.read( textFileParams );
             return properties;
         }
         catch ( Exception e )
