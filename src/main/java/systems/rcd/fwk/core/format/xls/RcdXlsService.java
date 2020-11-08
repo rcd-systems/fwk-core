@@ -1,6 +1,6 @@
 package systems.rcd.fwk.core.format.xls;
 
-import java.nio.file.Path;
+import java.io.InputStream;
 
 import systems.rcd.fwk.core.ctx.RcdContext;
 import systems.rcd.fwk.core.ctx.RcdService;
@@ -9,11 +9,12 @@ import systems.rcd.fwk.core.format.xls.data.RcdXlsWorkbook;
 public interface RcdXlsService
     extends RcdService
 {
-    static RcdXlsWorkbook read( final Path path )
+    static RcdXlsWorkbook read( final InputStream inputStream )
     {
-        return RcdContext.getService( RcdXlsService.class ).instRead( path );
+        return RcdContext.getService( RcdXlsService.class ).
+            instRead( inputStream );
     }
 
-    RcdXlsWorkbook instRead( Path path );
+    RcdXlsWorkbook instRead( InputStream inputStream );
 
 }
