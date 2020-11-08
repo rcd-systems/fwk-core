@@ -1,6 +1,6 @@
 package systems.rcd.fwk.core.format.xls.data;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 public interface RcdXlsCell
 {
@@ -8,7 +8,7 @@ public interface RcdXlsCell
 
     String getStringValue();
 
-    Instant getInstantValue();
+    LocalDateTime getDateTimeValue();
 
     Double getNumericValue();
 
