@@ -1,6 +1,7 @@
 package systems.rcd.fwk.core.format.xls.data;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface RcdXlsRow
@@ -8,7 +9,7 @@ public interface RcdXlsRow
 {
     String getString( int index );
 
-    Instant getInstant( int index );
+    LocalDateTime getDateTime( int index );
 
     Number getNumber( int index );
 
