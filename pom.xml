@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>systems.rcd.fwk.core</groupId>
   <artifactId>rcd-fwk-core</artifactId>
-  <version>8.0.0</version>
+  <version>8.0.1-SNAPSHOT</version>
   <name>Rcd Framework Core</name>
   <description>Rcd Framework Core</description>
 
